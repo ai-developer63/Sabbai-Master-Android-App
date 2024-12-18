@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.dashboardFragements.UserCoursesFragment">
+
+    <RelativeLayout
+        android:id="@+id/Toplayout"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/home_design_upper"/>
+
+    <RelativeLayout
+        android:id="@+id/noUserCourseView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Toplayout"
+        android:layout_marginTop="10dp"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/coursesdrawble"/>
+
+        <TextView
+            android:id="@+id/waringTxtUserCourse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_courses_buy_now"
+            android:textSize="18sp"
+            android:layout_below="@id/image"
+            android:textAlignment="center"
+            android:layout_centerInParent="true"
+            android:textStyle="bold"
+            android:layout_marginVertical="15dp"/>
+
+
+        <Button
+            android:id="@+id/enrollBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enroll Now"
+            android:layout_below="@id/waringTxtUserCourse"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

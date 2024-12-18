@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="sequentially">
+
+    <!-- Step 1: Scale up -->
+    <objectAnimator
+        android:propertyName="scaleX"
+        android:duration="300"
+        android:valueFrom="1.0"
+        android:valueTo="1.5"
+        android:valueType="floatType" />
+
+    <objectAnimator
+        android:propertyName="scaleY"
+        android:duration="300"
+        android:valueFrom="1.0"
+        android:valueTo="1.5"
+        android:valueType="floatType" />
+
+    <!-- Step 2: Fade in -->
+    <objectAnimator
+        android:propertyName="alpha"
+        android:duration="300"
+        android:valueFrom="0.0"
+        android:valueTo="1.0"
+        android:valueType="floatType" />
+
+    <!-- Step 3: Pause -->
+    <objectAnimator
+        android:propertyName="alpha"
+        android:duration="500"
+        android:valueFrom="1.0"
+        android:valueTo="1.0"
+        android:valueType="floatType" />
+
+    <!-- Step 4: Scale back down -->
+    <objectAnimator
+        android:propertyName="scaleX"
+        android:duration="300"
+        android:valueFrom="1.5"
+        android:valueTo="1.0"
+        android:valueType="floatType" />
+
+    <objectAnimator
+        android:propertyName="scaleY"
+        android:duration="300"
+        android:valueFrom="1.5"
+        android:valueTo="1.0"
+        android:valueType="floatType" />
+
+</set>

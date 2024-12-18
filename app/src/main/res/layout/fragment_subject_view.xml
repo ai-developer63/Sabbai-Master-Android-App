@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.subjectFragments.SubjectViewFragment">
+
+    <RelativeLayout
+        android:id="@+id/Toplayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/home_design_upper">
+
+        <TextView
+            android:id="@+id/headingTopic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Subject Name"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textAlignment="center"
+            android:layout_centerInParent="true"/>
+        <ImageButton
+            android:id="@+id/backBtn"
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/back_arrow"
+            android:backgroundTint="@color/logocolor"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/subjectImage"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_below="@id/Toplayout"
+        android:src="@drawable/images"/>
+    <TextView
+        android:id="@+id/priceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/subjectImage"
+        android:text="Price : "
+        android:textSize="18dp"
+        android:textColor="@color/black"
+        android:layout_marginStart="10dp"
+        />
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/subjectImage"
+        android:layout_toEndOf="@id/priceText"
+        android:text="NRP 1500"
+        android:textSize="18dp"
+        android:textColor="@color/black"
+        />
+    <Button
+        android:id="@+id/btnForAction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/subjectImage"
+        android:layout_alignParentEnd="true"
+        android:text="Buy Now"/>
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutSubject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnForAction"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tabLayoutSubject"/>
+
+
+
+
+
+</RelativeLayout>

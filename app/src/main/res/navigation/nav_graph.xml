@@ -1,0 +1,44 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/home">
+
+    <!-- HomeFragment -->
+    <fragment
+        android:id="@+id/home"
+        android:name="app.nepaliapp.sabbaikomaster.fragments.dashboardFragements.HomeFragment"
+        android:label="@string/home_fragment_label"
+        tools:layout="@layout/fragment_home" />
+
+    <!-- AllSubjectsFragment -->
+    <fragment
+        android:id="@+id/AllSubjectsFragment"
+        android:name="app.nepaliapp.sabbaikomaster.fragments.dashboardFragements.AllSubjectsFragment"
+        android:label="@string/subjects_fragment_label"
+        tools:layout="@layout/fragment_all_subjects" />
+
+    <!-- UserCoursesFragment -->
+    <fragment
+        android:id="@+id/UserCoursesFragment"
+        android:name="app.nepaliapp.sabbaikomaster.fragments.dashboardFragements.UserCoursesFragment"
+        android:label="@string/courses_fragment_label"
+        tools:layout="@layout/fragment_user_courses" />
+
+    <!-- NotificationsFragment -->
+    <fragment
+        android:id="@+id/NotificationsFragment"
+        android:name="app.nepaliapp.sabbaikomaster.fragments.dashboardFragements.NotificationsFragment"
+        android:label="@string/notifications_fragment_label"
+        tools:layout="@layout/fragment_notifications" />
+
+    <!-- ProfileFragment -->
+    <fragment
+        android:id="@+id/ProfileFragment"
+        android:name="app.nepaliapp.sabbaikomaster.fragments.dashboardFragements.ProfileFragment"
+        android:label="@string/profile_fragment_label"
+        tools:layout="@layout/fragment_profile" />
+
+
+
+</navigation>

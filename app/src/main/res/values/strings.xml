@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Sabbai ko Master</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="maintenance_icon">Server error Image\n</string>
+    <string name="subjects_fragment_label">allsubject</string>
+    <string name="courses_fragment_label">courses</string>
+    <string name="notifications_fragment_label">notification</string>
+    <string name="profile_fragment_label">profile</string>
+    <string name="home_fragment_label">home</string>
+    <string name="search_tools_text">Discover, learn, and master!</string>
+    <string name="subjectAdding">Adding More Subjects Soon!</string>
+    <string name="no_courses_buy_now">No Courses,Enroll Now \n To Start Learning</string>
+</resources>

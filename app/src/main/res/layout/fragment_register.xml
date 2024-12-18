@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.loginFragments.RegisterFragment">
+
+
+    <ImageView
+        android:id="@+id/backBtn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/back_arrow" />
+
+    <TextView
+        android:id="@+id/Registertextid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Register"
+        android:textColor="@color/Colour_After_click"
+
+        android:textSize="35sp" />
+
+    <RelativeLayout
+        android:id="@+id/EditTextHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Registertextid"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="25dp">
+
+        <TextView
+            android:id="@+id/TextName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="7dp"
+            android:text="Full Name : "
+            android:textColor="@color/logocolor"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/FullName"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_below="@id/TextName"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/edittextdesign"
+            android:ems="15"
+            android:hint="Enter your Full Name"
+            android:paddingStart="30dp"
+            android:textColor="@color/textcolor" />
+
+        <TextView
+            android:id="@+id/TextEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/FullName"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="15dp"
+            android:text="Email address"
+            android:textColor="@color/logocolor"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/EmailEdittext"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_below="@id/TextEmail"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/edittextdesign"
+            android:ems="15"
+            android:hint="Enter your Email Address"
+            android:paddingStart="30dp"
+            android:textColor="@color/textcolor" />
+
+        <TextView
+            android:id="@+id/TextPhoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/EmailEdittext"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="15dp"
+            android:text="Phone Number"
+            android:textColor="@color/logocolor"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/PhoneEdittext"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_below="@id/TextPhoneNumber"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/edittextdesign"
+            android:ems="15"
+            android:hint="Enter Your Number"
+            android:inputType="number"
+            android:paddingStart="30dp"
+            android:textColor="@color/textcolor" />
+
+        <TextView
+            android:id="@+id/TextPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/PhoneEdittext"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="15dp"
+            android:text="Enter your password"
+            android:textColor="@color/logocolor"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/PasswordEdittextEdittext"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_below="@id/TextPassword"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/edittextdesign"
+            android:ems="15"
+            android:hint="Enter your Password"
+            android:inputType="textPassword"
+            android:paddingStart="30dp" />
+
+        <ToggleButton
+            android:id="@+id/togglePasswordVisibility"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@id/PasswordEdittextEdittext"
+            android:layout_marginStart="-40dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toEndOf="@id/PasswordEdittextEdittext"
+            android:background="@drawable/ic_eye_toggle"
+            android:textOff=""
+            android:textOn="" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/AlreadyhaveanAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/EditTextHolder"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:text="Already have an account?"
+        android:textColor="@color/logocolor"
+        android:textSize="18sp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/EditTextHolder"
+        android:layout_marginTop="30dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/signUpButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/btn_design"
+            android:backgroundTint="@color/Colour_After_click"
+            android:stateListAnimator="@animator/click_animation"
+            android:text="Create Account"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+</RelativeLayout>
