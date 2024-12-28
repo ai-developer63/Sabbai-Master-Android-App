@@ -3,11 +3,14 @@ package app.nepaliapp.sabbaikomaster.fragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -18,6 +21,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import app.nepaliapp.sabbaikomaster.R;
 import app.nepaliapp.sabbaikomaster.common.DeviceIdChecker;
@@ -42,44 +46,38 @@ public class DashBoardManager extends AppCompatActivity {
 
         // Find views
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+        replaceFragment(new HomeFragment());
 
-        // Get NavHostFragment
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.frameLayoutInMain);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.home) {
+                    replaceFragment(new HomeFragment());
+                } else if (itemId == R.id.AllSubjectsFragment) {
+                    replaceFragment(new AllSubjectsFragment());
+                } else if (itemId == R.id.UserCoursesFragment) {
+                    replaceFragment(new UserCoursesFragment());
+                } else if (itemId == R.id.NotificationsFragment) {
+                    replaceFragment(new NotificationsFragment());
+                } else if (itemId == R.id.ProfileFragment) {
+                    replaceFragment(new ProfileFragment());
+                } else {
+                    replaceFragment(new HomeFragment());
+                }
 
-        if (navHostFragment == null) {
-            throw new IllegalStateException("NavHostFragment is null. Check your layout or IDs.");
-        }
-
-        // Get NavController
-        NavController navController = navHostFragment.getNavController();
-        Log.d("NavController", "Current Destination: " + navController.getCurrentDestination());
-
-
-        // Setup BottomNavigationView with NavController
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
-        // Custom system to fallback to manual fragment transactions
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            boolean handled = false;
-            try {
-                handled = NavigationUI.onNavDestinationSelected(item, navController);
-            } catch (IllegalArgumentException e) {
-                Log.e("NavController", "Unknown Fragment. Fallback to manual loading.", e);
-                handleUnknownFragment(item.getItemId()); // Call fallback method
-                return true; // Return true to indicate manual handling
+                return true;
             }
-            return handled;
         });
+
 
 
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (!navController.navigateUp()) {
-                    // If backstack is empty, show exit dialog
+
                     showExitAlertDialog();
-                }
+
             }
         };
         getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
@@ -114,28 +112,44 @@ public class DashBoardManager extends AppCompatActivity {
         }
     }
 
+    public void setBottomNavigationSelected(int position) {
+        int menuItemId = getMenuItemIdForPosition(position); // Convert position to menu item ID
+        bottomNavigationView.setSelectedItemId(menuItemId); // Update the selected item
+    }
+
     private void handleUnknownFragment(int itemId) {
         if (itemId == R.id.home) {
-            replaceFragment(new HomeFragment(), "HomeFragment");
+            replaceFragment(new HomeFragment());
         } else if (itemId == R.id.AllSubjectsFragment) {
-            replaceFragment(new AllSubjectsFragment(), "AllSubjectsFragment");
+            replaceFragment(new AllSubjectsFragment());
         } else if (itemId == R.id.UserCoursesFragment) {
-            replaceFragment(new UserCoursesFragment(), "UserCoursesFragment");
+            replaceFragment(new UserCoursesFragment());
         } else if (itemId == R.id.NotificationsFragment) {
-            replaceFragment(new NotificationsFragment(), "NotificationsFragment");
+            replaceFragment(new NotificationsFragment());
         } else if (itemId == R.id.ProfileFragment) {
-            replaceFragment(new ProfileFragment(), "ProfileFragment");
+            replaceFragment(new ProfileFragment());
         } else {
             Log.e("UnknownFragment", "No fallback fragment available for item ID: " + itemId);
         }
     }
 
-    private void replaceFragment(Fragment fragment, String tag) {
+    private void replaceFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frameLayoutInMain, fragment, tag)
-                .addToBackStack(tag)
+                .replace(R.id.frameLayoutInMain, fragment)
+                .addToBackStack(null)
                 .commit();
     }
+    private int getMenuItemIdForPosition(int position) {
+        switch (position) {
+            case 1: return R.id.home;
+            case 2: return R.id.AllSubjectsFragment;
+            case 3: return R.id.UserCoursesFragment;
+            case 4: return R.id.NotificationsFragment;
+            case 5: return R.id.ProfileFragment;
+            default: return R.id.home; // Default to Home if position is invalid
+        }
+    }
+
 
 }

@@ -1,16 +1,16 @@
 package app.nepaliapp.sabbaikomaster.Adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import app.nepaliapp.sabbaikomaster.R;
@@ -34,7 +33,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
     PreferencesManager preferencesManager;
     FragmentManager fragmentManager;
 
-    public SubjectAdapter(Context context, JSONArray array,FragmentManager fragmentManager) {
+    public SubjectAdapter(Context context, JSONArray array, FragmentManager fragmentManager) {
         this.context = context;
         this.array = array;
         this.preferencesManager = new PreferencesManager(context);
@@ -51,34 +50,31 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         JSONObject jsonObject = array.optJSONObject(position);
-            String name = jsonObject.optString("name");
-            String logoUrl = jsonObject.optString("logo");
+        String name = jsonObject.optString("name");
+        String logoUrl = jsonObject.optString("logo");
         Log.d("Logo url", logoUrl);
-            Boolean islive = jsonObject.optBoolean("isLive");
-            Boolean isAnimated =  jsonObject.optBoolean("isAnimated");
-            String shortDescription = jsonObject.optString("shortDescription");
-            holder.name.setText(name);
-            holder.shortDescription.setText(shortDescription);
-            holder.islive.setVisibility(islive ? View.VISIBLE : View.GONE);
-            holder.isAnimated.setVisibility(isAnimated ? View.VISIBLE : View.GONE);
-            holder.classTag.setText(jsonObject.optString("whichClass"));
-             if (jsonObject.optBoolean("paid",false)){
-               holder.button.setText("Watch Now");
-               holder.button.setOnClickListener(new View.OnClickListener() {
-                   @Override
-                   public void onClick(View v) {
-                       replaceFragments(new SubjectViewFragment());
-                   }
-               });
-
-             }
-
+        Boolean islive = jsonObject.optBoolean("isLive");
+        Boolean isAnimated = jsonObject.optBoolean("isAnimated");
+        String shortDescription = jsonObject.optString("shortDescription");
+        holder.name.setText(name);
+        holder.shortDescription.setText(shortDescription);
+        holder.islive.setVisibility(islive ? View.VISIBLE : View.GONE);
+        holder.isAnimated.setVisibility(isAnimated ? View.VISIBLE : View.GONE);
+        holder.classTag.setText(jsonObject.optString("whichClass"));
+        holder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("subjectId", jsonObject.optString("id"));
+                SubjectViewFragment subjectViewFragment = new SubjectViewFragment();
+                subjectViewFragment.setArguments(bundle);
+                replaceFragments(subjectViewFragment);
+            }
+        });
 
 
         HeaderPicasso.initializePicassoWithHeaders(context, "Authorization", "Bearer " + preferencesManager.getJwtToken());
         Picasso.get().load(logoUrl).into(holder.logoImage);
-
-
 
 
     }
@@ -86,17 +82,23 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
     @Override
     public int getItemCount() {
 
-        if (array == null){
+        if (array == null) {
             return 0;
-        }else{
-        return array.length();
+        } else {
+            return array.length();
         }
     }
 
+    private void replaceFragments(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayoutInMain, fragment);
+        fragmentTransaction.commit();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name,islive,isAnimated,shortDescription,description,classTag;
+        TextView name, islive, isAnimated, shortDescription, description, classTag;
         ImageView logoImage;
-        Button button;
+        CardView button;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -105,13 +107,9 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
             islive = itemView.findViewById(R.id.tagLive);
             isAnimated = itemView.findViewById(R.id.tagAnimated);
             shortDescription = itemView.findViewById(R.id.shortDescription);
-            classTag= itemView.findViewById(R.id.tagBsc);
-            button = itemView.findViewById(R.id.buyButton);
+            classTag = itemView.findViewById(R.id.tagBsc);
+            button = itemView.findViewById(R.id.subjectCard);
+
         }
-    }
-    private void replaceFragments(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayoutInMain, fragment);
-        fragmentTransaction.commit();
     }
 }

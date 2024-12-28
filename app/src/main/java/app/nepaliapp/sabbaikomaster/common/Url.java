@@ -10,6 +10,12 @@ public class Url {
     String home="/api/home";
     String Profile="/api/profile";
     String subjects = "/api/subject";
+    String SubjectDetail ="/api/viewSubject/";
+    
+
+    public String getSubjectDetail(String subjectId) {
+        return serverUrl+SubjectDetail+subjectId;
+    }
 
     public String getApp_checkup() {
         return url+app_checkup;

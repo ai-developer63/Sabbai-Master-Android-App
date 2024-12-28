@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:text="Subject Name"
             android:textColor="@color/white"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:textAlignment="center"
             android:layout_centerInParent="true"/>
         <ImageButton
@@ -35,37 +35,31 @@
     <ImageView
         android:id="@+id/subjectImage"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
+        android:layout_height="200dp"
         android:layout_below="@id/Toplayout"
-        android:src="@drawable/images"/>
-    <TextView
-        android:id="@+id/priceText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/subjectImage"
-        android:text="Price : "
-        android:textSize="18dp"
-        android:textColor="@color/black"
-        android:layout_marginStart="10dp"
-        />
+        android:src="@drawable/images"
+        android:layout_marginTop="10dp"/>
+
 
     <TextView
         android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/subjectImage"
-        android:layout_toEndOf="@id/priceText"
+        android:layout_marginEnd="10dp"
         android:text="NRP 1500"
         android:textSize="18dp"
         android:textColor="@color/black"
+        android:layout_alignParentEnd="true"
         />
     <Button
         android:id="@+id/btnForAction"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/subjectImage"
+        android:layout_below="@id/price"
         android:layout_alignParentEnd="true"
-        android:text="Buy Now"/>
+        android:text="Buy Now"
+        />
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayoutSubject"
         android:layout_width="match_parent"
