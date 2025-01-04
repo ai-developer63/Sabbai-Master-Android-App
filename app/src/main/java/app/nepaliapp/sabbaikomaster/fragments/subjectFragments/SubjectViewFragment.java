@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.android.volley.AuthFailureError;
@@ -48,7 +49,7 @@ import app.nepaliapp.sabbaikomaster.tabcontroller.SubjectTabLayoutController;
 public class SubjectViewFragment extends Fragment {
 
     TabLayout tabLayout;
-    ViewPager2 viewPager2;
+    ViewPager2 viewPager;
     RequestQueue requestQueue;
     PreferencesManager preferencesManager;
     ImageButton backBtn;
@@ -78,9 +79,7 @@ public class SubjectViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_subject_view, container, false);
         tabLayout = view.findViewById(R.id.tabLayoutSubject);
-        viewPager2 = view.findViewById(R.id.viewpager);
-        SubjectTabLayoutController adapter = new SubjectTabLayoutController(requireActivity());
-        viewPager2.setAdapter(adapter);
+        viewPager = view.findViewById(R.id.viewpager);
         backBtn = view.findViewById(R.id.backBtn);
         subjectTitle = view.findViewById(R.id.headingTopic);
         price = view.findViewById(R.id.price);
@@ -88,6 +87,7 @@ public class SubjectViewFragment extends Fragment {
         Bundle bundle = getArguments();
         assert bundle != null;
         String subjectId = bundle.getString("subjectId");
+        String fromwehere = bundle.getString("subjectBackHint","Description");
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,17 +100,43 @@ public class SubjectViewFragment extends Fragment {
 
         getSubjectData(subjectId);
 
-        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
-            if (position == 0) {
-                tab.setText("Description");
-            } else if (position == 1) {
-                tab.setText("Topics");
-            }
-        }).attach();
+
+setupViewPagerAndTabs(fromwehere);
+
 
         // Inflate the layout for this fragment
         return view;
     }
+
+    private void setupViewPagerAndTabs(String positioner) {
+        FragmentActivity fragmentActivity = getActivity();
+        if (fragmentActivity != null) {
+            SubjectTabLayoutController adapter = new SubjectTabLayoutController(requireActivity());
+            viewPager.setAdapter(adapter);
+            new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+                if (position == 0) {
+                    tab.setText("Description");
+                } else if (position == 1) {
+                    tab.setText("Topics");
+                }
+            }).attach();
+            int position = getTabPosition(positioner);
+            Log.d("TAG", "setupViewPagerAndTabs: "+position);
+            viewPager.setCurrentItem(position, true);
+
+        }
+    }
+
+    private int getTabPosition(String positioner){
+        switch (positioner) {
+            case "Description":
+                return 0;
+            case "Topics":
+                return 1;
+            default: return 0;
+        }
+    }
+
 
     private void handleBackPress() {
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
@@ -137,7 +163,7 @@ public class SubjectViewFragment extends Fragment {
                 // Send data to fragments via adapter
                 String description = response.optString("shortDescription", "No description available.");
                 String topics = response.optString("longDescription", "No topics available.");
-                SubjectTabLayoutController adapter = (SubjectTabLayoutController) viewPager2.getAdapter();
+                SubjectTabLayoutController adapter = (SubjectTabLayoutController) viewPager.getAdapter();
                 if (adapter != null) {
                     adapter.updateData(description, topics,response.optJSONArray("topics"));
                 }

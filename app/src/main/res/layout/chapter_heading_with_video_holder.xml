@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <!-- Title TextView at the top -->
+    <TextView
+        android:id="@+id/subChapterName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subtopics List"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dp" />
+
+   <androidx.recyclerview.widget.RecyclerView
+       android:id="@+id/videoCardRecycler"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_below="@id/subChapterName"
+       android:scrollbars="horizontal" />
+
+</RelativeLayout>

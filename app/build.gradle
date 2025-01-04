@@ -45,10 +45,15 @@ dependencies {
     androidTestImplementation libs.espresso.core
     //Volley Added
     implementation libs.volley
-    //Volley is here
     implementation libs.picasso
 
     //Loading effects
     implementation libs.shimmer
+
+    //Video Implementation
+    implementation libs.media3.exoplayer
+    implementation libs.media3.ui
+
+
 
 }

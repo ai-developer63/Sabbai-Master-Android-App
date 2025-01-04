@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,15 +18,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import app.nepaliapp.sabbaikomaster.R;
 
 public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder> {
     Context context;
     JSONArray array;
+    FragmentManager fragmentManager;
 
-    public TopicsAdapter(Context context,JSONArray array) {
+    public TopicsAdapter(Context context, JSONArray array, FragmentManager fragmentManager) {
         this.context = context;
         this.array = array;
+        this.fragmentManager = fragmentManager;
     }
 
     @NonNull
@@ -38,11 +43,15 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         try {
-            JSONObject object = new JSONObject();
-             object = array.getJSONObject(position);
+            JSONObject object = array.getJSONObject(position);
+            holder.relativeLayout.setVisibility(View.GONE);
+            if (Objects.requireNonNull(object.optJSONArray("chapterModel")).length() == 0) {
+                holder.recyclerViewBtn.setVisibility(View.GONE);
+                holder.NoChapterTxt.setVisibility(View.VISIBLE);
+            }
             holder.txtView.setText(object.optString("name"));
             holder.recyclerViewBtn.setLayoutManager(new LinearLayoutManager(context));
-            ChapterCardBtnAdapter adapter = new ChapterCardBtnAdapter(context,object.optJSONArray("chapterModel"));
+            ChapterCardBtnAdapter adapter = new ChapterCardBtnAdapter(context, object.optJSONArray("chapterModel"),fragmentManager);
             holder.recyclerViewBtn.setAdapter(adapter);
 
         } catch (JSONException e) {
@@ -82,7 +91,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
         RelativeLayout relativeLayout;
         ImageButton imageButton;
         RecyclerView recyclerViewBtn;
-        TextView txtView;
+        TextView txtView, NoChapterTxt;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -90,7 +99,8 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
             relativeLayout = itemView.findViewById(R.id.subchaptersContainer);
             imageButton = itemView.findViewById(R.id.btnExpand);
             recyclerViewBtn = itemView.findViewById(R.id.recyclerSubjectButton);
-        txtView = itemView.findViewById(R.id.topicTitle);
+            txtView = itemView.findViewById(R.id.topicTitle);
+            NoChapterTxt = itemView.findViewById(R.id.noChapterTxt);
         }
 
 

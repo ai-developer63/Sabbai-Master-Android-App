@@ -15,13 +15,16 @@
         android:theme="@style/Theme.SabbaiKoMaster"
         tools:targetApi="31">
         <activity
+            android:name=".Activity.VideoPlayingActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.IntialServerError"
             android:exported="false" />
         <activity
             android:name=".fragmentManager.DashBoardManager"
             android:exported="false"
             android:theme="@style/Theme.SabbaiKoMaster"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".fragmentManager.SigningManager"
             android:exported="false" />

@@ -38,7 +38,7 @@ public class TopicsFragment extends Fragment {
             String topicsDataString = args.getString("topicsData");
             try {
                 JSONArray topicsJSONArray = new JSONArray(topicsDataString);
-                Log.d("topicsJSONArray", topicsJSONArray.toString());
+                Log.d("topicsJSONArray1", topicsJSONArray.toString());
                 updateTopics(topicsJSONArray);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -53,8 +53,9 @@ public class TopicsFragment extends Fragment {
         // Handle the received JSONArray
         if (topicsJSONArray != null) {
             try {
+                Log.d("TAG", "updateTopics: came here and Data is "+topicsJSONArray);
                 // Parse and use the topics JSONArray (example)
-                TopicsAdapter topicsAdapter = new TopicsAdapter(requireContext(), topicsJSONArray);
+                TopicsAdapter topicsAdapter = new TopicsAdapter(requireContext(), topicsJSONArray,requireActivity().getSupportFragmentManager());
                 recyclerView.setAdapter(topicsAdapter);
 
             } catch (Exception e) {
