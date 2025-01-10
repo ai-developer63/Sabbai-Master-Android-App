@@ -38,7 +38,7 @@ public class VideoAdapterForVideoViewCard extends RecyclerView.Adapter<VideoAdap
     public void onBindViewHolder(@NonNull VideoAdapterForVideoViewCard.VideoViewHolder holder, int position) {
         holder.subTopicsName.setText(array.optJSONObject(position).optString("name"));
         JSONArray videoArray = array.optJSONObject(position).optJSONArray("videos");
-        holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        holder.recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         VideoCardAdapter videoCardAdapter = new VideoCardAdapter(context, videoArray);
         holder.recyclerView.setAdapter(videoCardAdapter);
     }

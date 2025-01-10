@@ -11,7 +11,12 @@ public class Url {
     String Profile="/api/profile";
     String subjects = "/api/subject";
     String SubjectDetail ="/api/viewSubject/";
-    
+
+    String VideoLink = "/api/ranger/";
+
+    public String getVideoLink(String fileNameWithExtension) {
+        return url+VideoLink+fileNameWithExtension;
+    }
 
     public String getSubjectDetail(String subjectId) {
         return serverUrl+SubjectDetail+subjectId;

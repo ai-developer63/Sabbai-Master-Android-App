@@ -48,6 +48,7 @@ public class ChapterVideoCardViewer extends Fragment {
             subjectId = array.getJSONObject(0).optString("subjectId");
             VideoAdapterForVideoViewCard videoAdapterForVideoViewCard = new VideoAdapterForVideoViewCard(requireContext(), array);
             recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+
             recyclerView.setAdapter(videoAdapterForVideoViewCard);
         } catch (JSONException e) {
             throw new RuntimeException(e);
