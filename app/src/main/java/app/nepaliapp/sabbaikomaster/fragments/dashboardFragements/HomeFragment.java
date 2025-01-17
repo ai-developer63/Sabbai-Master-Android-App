@@ -31,6 +31,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Calendar;
@@ -46,6 +47,7 @@ import app.nepaliapp.sabbaikomaster.common.HeaderPicasso;
 import app.nepaliapp.sabbaikomaster.common.MySingleton;
 import app.nepaliapp.sabbaikomaster.common.PreferencesManager;
 import app.nepaliapp.sabbaikomaster.common.Url;
+import app.nepaliapp.sabbaikomaster.common.UserClassSelector;
 
 public class HomeFragment extends Fragment {
     Context context;
@@ -113,6 +115,10 @@ public class HomeFragment extends Fragment {
                 SubjectAdapter adapter = new SubjectAdapter(context, response.optJSONArray("subjects"),getParentFragmentManager());
                 subjectRecyclerView.setLayoutManager(new LinearLayoutManager(context));
                 subjectRecyclerView.setAdapter(adapter);
+
+
+
+
                 NewsTxt.setText(response.optString("news"));
                 NewsTxt.setSelected(true);
                 shimmerFrameLayout.stopShimmer();
@@ -122,6 +128,22 @@ public class HomeFragment extends Fragment {
                 subjectRecyclerView.setVisibility(View.VISIBLE);
                 NewsTxt.setVisibility(View.VISIBLE);
                 CoursesTxt.setVisibility(View.VISIBLE);
+                if(response.optString("news").equalsIgnoreCase("No message")){
+                    JSONArray classes =response.optJSONArray("classes");
+                    assert classes != null;
+                    String [] classesName = new String[classes.length()+1];
+                    for (int i = 0; i < classes.length();i++){
+                        JSONObject object = classes.optJSONObject(i);
+                        classesName[i] =  object.optString("name","unknown");
+                        if (i==classes.length()-1){
+                            classesName[i+1] = "None of Above";
+                        }
+                    }
+                    delayAction(() -> {
+                        UserClassSelector.show(requireContext(),classesName);
+                    });
+
+                }
 
             }
         }, new Response.ErrorListener() {

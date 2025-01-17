@@ -26,14 +26,14 @@ import app.nepaliapp.sabbaikomaster.common.HeaderPicasso;
 import app.nepaliapp.sabbaikomaster.common.PreferencesManager;
 import app.nepaliapp.sabbaikomaster.fragments.subjectFragments.SubjectViewFragment;
 
-public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHolder> {
+public class SubjecAdapterWithDay extends RecyclerView.Adapter<SubjecAdapterWithDay.ViewHolder> {
 
     Context context;
     JSONArray array;
     PreferencesManager preferencesManager;
     FragmentManager fragmentManager;
 
-    public SubjectAdapter(Context context, JSONArray array, FragmentManager fragmentManager) {
+    public SubjecAdapterWithDay(Context context, JSONArray array, FragmentManager fragmentManager) {
         this.context = context;
         this.array = array;
         this.preferencesManager = new PreferencesManager(context);
@@ -56,12 +56,13 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
         Boolean islive = jsonObject.optBoolean("isLive");
         Boolean isAnimated = jsonObject.optBoolean("isAnimated");
         String shortDescription = jsonObject.optString("shortDescription");
+        holder.pricetext.setText("Remaining Days");
         holder.name.setText(name);
         holder.shortDescription.setText(shortDescription);
         holder.islive.setVisibility(islive ? View.VISIBLE : View.GONE);
         holder.isAnimated.setVisibility(isAnimated ? View.VISIBLE : View.GONE);
         holder.classTag.setText(jsonObject.optString("whichClass"));
-        holder.Price.setText("NRP"+" "+jsonObject.optString("price"));
+        holder.Price.setText(jsonObject.optString("daysRemaning"));
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +98,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, islive, isAnimated, shortDescription, description, classTag,Price;
+        TextView name, islive, isAnimated, shortDescription, pricetext, classTag,Price;
         ImageView logoImage;
         CardView button;
 
@@ -111,6 +112,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
             classTag = itemView.findViewById(R.id.tagBsc);
             button = itemView.findViewById(R.id.subjectCard);
             Price = itemView.findViewById(R.id.priceNumber);
+            pricetext = itemView.findViewById(R.id.price);
 
         }
     }

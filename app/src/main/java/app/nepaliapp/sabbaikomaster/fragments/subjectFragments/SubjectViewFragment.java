@@ -53,7 +53,7 @@ public class SubjectViewFragment extends Fragment {
     RequestQueue requestQueue;
     PreferencesManager preferencesManager;
     ImageButton backBtn;
-    TextView subjectTitle, price;
+    TextView subjectTitle;
     ImageView subjectLogoImage;
     DashBoardManager dashBoardManager;
 
@@ -82,7 +82,6 @@ public class SubjectViewFragment extends Fragment {
         viewPager = view.findViewById(R.id.viewpager);
         backBtn = view.findViewById(R.id.backBtn);
         subjectTitle = view.findViewById(R.id.headingTopic);
-        price = view.findViewById(R.id.price);
         subjectLogoImage = view.findViewById(R.id.subjectImage);
         Bundle bundle = getArguments();
         assert bundle != null;
@@ -156,7 +155,6 @@ setupViewPagerAndTabs(fromwehere);
             @Override
             public void onResponse(JSONObject response) {
                 subjectTitle.setText(response.optString("name"));
-                price.setText(response.optString("price"));
                 HeaderPicasso.initializePicassoWithHeaders(requireContext(), "Authorization", "Bearer " + preferencesManager.getJwtToken());
                 Picasso.get().load(response.optString("url")).into(subjectLogoImage);
 

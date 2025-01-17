@@ -4,14 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -42,7 +45,7 @@ public class RegisterFragment extends Fragment {
     RequestQueue requestQueue;
     Context context;
     PreferencesManager preferencesManager;
-
+    ToggleButton togglePasswordVisibility;
     EditText name, EmailId, PhoneNumber, password;
     Button createAccount;
 
@@ -69,13 +72,16 @@ public class RegisterFragment extends Fragment {
         PhoneNumber = view.findViewById(R.id.PhoneEdittext);
         password = view.findViewById(R.id.PasswordEdittextEdittext);
         createAccount = view.findViewById(R.id.signUpButton);
-
+        togglePasswordVisibility = view.findViewById(R.id.togglePasswordVisibility);
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (TextUtils.isEmpty(name.getText().toString().trim())) {
                     name.setError("Full Name is required");
-                } else if (TextUtils.isEmpty(EmailId.getText().toString().trim())) {
+                }
+                else if (!isValidName(name.getText().toString().trim())) {
+                    name.setError("Enter a valid Name");
+                }else if (TextUtils.isEmpty(EmailId.getText().toString().trim())) {
                     EmailId.setError("Email is required");
                 } else if (!isEmail(EmailId.getText().toString().trim())) {
                     EmailId.setError("Enter a valid Email");
@@ -89,7 +95,8 @@ public class RegisterFragment extends Fragment {
                     password.setError("Password is required");
                 } else if (password.getText().toString().trim().length() < 6) {
                     password.setError("Password must be at least 6 characters");
-                } else {
+                }
+                else {
                     registerRequest();
                 }
 
@@ -103,7 +110,18 @@ public class RegisterFragment extends Fragment {
                 FragmentChanger(new LoginFragment());
             }
         });
-
+        togglePasswordVisibility.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // Show password
+                    password.setTransformationMethod(null); // Show password in plain text
+                } else {
+                    // Hide password
+                    password.setTransformationMethod(new PasswordTransformationMethod());
+                }
+            }
+        });
 
         return view;
     }
@@ -192,6 +210,12 @@ public class RegisterFragment extends Fragment {
 
     private boolean isEmail(String username) {
         Log.d("Email Passed", "isEmail: " + username);
-        return username != null && username.contains("@") && username.contains(".");
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        return username != null && username.matches(emailRegex);
+    }
+    private boolean isValidName(String name) {
+        Log.d("Name Passed", "isValidName: " + name);
+        String nameRegex = "^[a-zA-Z]+([ '-][a-zA-Z]+)*$";
+        return name != null && name.matches(nameRegex);
     }
 }

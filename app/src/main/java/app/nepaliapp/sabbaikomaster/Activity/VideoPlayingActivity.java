@@ -31,6 +31,7 @@ import app.nepaliapp.sabbaikomaster.Adapter.VideoCardAdapter;
 import app.nepaliapp.sabbaikomaster.R;
 import app.nepaliapp.sabbaikomaster.common.CustomHttpDataSourceFactory;
 import app.nepaliapp.sabbaikomaster.common.PreferencesManager;
+import app.nepaliapp.sabbaikomaster.common.Url;
 
 public class VideoPlayingActivity extends AppCompatActivity {
     PlayerView playerView;
@@ -153,12 +154,13 @@ public class VideoPlayingActivity extends AppCompatActivity {
 
     @OptIn(markerClass = UnstableApi.class)
     private void handleIntent(Intent intent) {
+        Url url = new Url();
         String fileName = intent.getStringExtra("videoUrl");
         String title = intent.getStringExtra("title");
         String jsonArray = intent.getStringExtra("jsonArray");
         titlesView.setText(title);
         String uuid = removeExtensionOfFile(fileName);
-        String link = "https://gc5tdmq1-8080.inc1.devtunnels.ms/api/range/" + uuid;
+        String link = url.getVideoLink()+ uuid;
 
         try {
             VideoCardAdapter videoCardAdapter = new VideoCardAdapter(getApplicationContext(), new JSONArray(jsonArray));

@@ -41,39 +41,19 @@
         android:layout_marginTop="10dp"/>
 
 
-    <TextView
-        android:id="@+id/price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/subjectImage"
-        android:layout_marginEnd="10dp"
-        android:text="NRP 1500"
-        android:textSize="18dp"
-        android:textColor="@color/black"
-        android:layout_alignParentEnd="true"
-        />
-    <Button
-        android:id="@+id/btnForAction"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/price"
-        android:layout_alignParentEnd="true"
-        android:text="Buy Now"
-        />
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayoutSubject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btnForAction"/>
+        android:layout_below="@id/subjectImage"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tabLayoutSubject"/>
-
-
-
+        android:layout_below="@id/tabLayoutSubject"
+        android:layout_marginTop="-2dp" />
 
 
 </RelativeLayout>

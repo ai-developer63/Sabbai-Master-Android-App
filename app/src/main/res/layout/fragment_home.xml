@@ -55,27 +55,27 @@
             android:textSize="21sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/searchEditText"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_below="@id/welcomeTxt"
-            android:layout_margin="8dp"
-            android:background="@drawable/rounded_edittext_background"
-            android:drawableEnd="@drawable/search_icon"
-            android:drawablePadding="8dp"
-            android:hint="@string/search_tools_text"
-            android:paddingStart="36dp"
-            android:paddingEnd="16dp"
-            android:textColor="#000000"
-            android:textColorHint="#808080" />
+<!--        <EditText-->
+<!--            android:id="@+id/searchEditText"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:layout_below="@id/welcomeTxt"-->
+<!--            android:layout_margin="8dp"-->
+<!--            android:background="@drawable/rounded_edittext_background"-->
+<!--            android:drawableEnd="@drawable/search_icon"-->
+<!--            android:drawablePadding="8dp"-->
+<!--            android:hint="@string/search_tools_text"-->
+<!--            android:paddingStart="36dp"-->
+<!--            android:paddingEnd="16dp"-->
+<!--            android:textColor="#000000"-->
+<!--            android:textColorHint="#808080" />-->
 
 
         <TextView
             android:id="@+id/latestNews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/searchEditText"
+            android:layout_below="@id/welcomeTxt"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="gone" />

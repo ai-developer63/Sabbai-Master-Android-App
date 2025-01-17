@@ -28,7 +28,13 @@
         app:itemIconSize="30dp"
         app:itemIconTint="@color/logocolor"
         app:itemTextColor="@color/grey"
+        app:itemTextAppearanceActiveBoldEnabled="true"
         app:menu="@menu/navbar_tags"
+        app:labelVisibilityMode="labeled"
+        app:itemHorizontalTranslationEnabled="true"
+        android:elevation="8dp"
+
+
 
         />
 </RelativeLayout>

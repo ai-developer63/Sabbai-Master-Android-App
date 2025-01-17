@@ -12,10 +12,34 @@ public class Url {
     String subjects = "/api/subject";
     String SubjectDetail ="/api/viewSubject/";
 
-    String VideoLink = "/api/ranger/";
+    String VideoLink = "/api/range/";
 
-    public String getVideoLink(String fileNameWithExtension) {
-        return url+VideoLink+fileNameWithExtension;
+    String verifyPurchase = "/api/subjectPurchased/";
+
+    String userPurchasedSubject = "/api/purchasedSubjects";
+
+    String updateClass = "/api/profileupdate/selectedClass/";
+
+    String classes = "/api/getAllClasses";
+
+    public String getClasses() {
+        return serverUrl+classes;
+    }
+
+    public String getUpdateClass(String classes) {
+        return serverUrl+updateClass+classes;
+    }
+
+    public String getUserPurchasedSubject() {
+        return serverUrl+userPurchasedSubject;
+    }
+
+    public String getVerifyPurchase(String id) {
+        return serverUrl+verifyPurchase+id;
+    }
+
+    public String getVideoLink() {
+        return serverUrl+VideoLink;
     }
 
     public String getSubjectDetail(String subjectId) {
