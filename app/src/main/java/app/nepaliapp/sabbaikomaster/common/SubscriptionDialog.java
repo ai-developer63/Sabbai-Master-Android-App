@@ -5,6 +5,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatEditText;
+
 import app.nepaliapp.sabbaikomaster.R;
 
 
@@ -16,6 +18,13 @@ public class SubscriptionDialog {
         View layout_dialog = LayoutInflater.from(context).inflate(R.layout.check_purchase_protocol, null);
         builder.setView(layout_dialog);
         AppCompatButton btnRetry = layout_dialog.findViewById(R.id.btnRetry);
+        AppCompatEditText userText = layout_dialog.findViewById(R.id.Usermessage);
+        btnRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         AlertDialog dialog = builder.create();
         dialog.show();
         dialog.setCancelable(true);

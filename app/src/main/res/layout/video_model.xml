@@ -9,7 +9,10 @@
     app:cardElevation="4dp"
     app:cardCornerRadius="8dp"
     android:id="@+id/videoCardID"
-    android:layout_marginBottom="20dp">
+    android:layout_marginEnd="10dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="10dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"

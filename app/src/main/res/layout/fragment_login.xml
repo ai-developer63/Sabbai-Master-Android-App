@@ -32,19 +32,18 @@
 
         <EditText
             android:id="@+id/PhoneNumberEditText"
-            android:background="@drawable/edittextdesign"
-
-            android:layout_marginTop="15dp"
             android:layout_width="wrap_content"
+
             android:layout_height="50dp"
             android:layout_below="@+id/TextEmail"
-            android:layout_centerHorizontal="true"
+            android:layout_marginTop="13dp"
+            android:autofillHints="phone"
+            android:background="@drawable/edittextdesign"
             android:ems="15"
             android:hint="Email or Phone Number"
-            android:textColor="@color/textcolor"
-            android:paddingStart="25dp"
-            android:autofillHints="phone"
             android:inputType="text"
+            android:paddingStart="25dp"
+            android:textColor="@color/textcolor"
 
             />
 

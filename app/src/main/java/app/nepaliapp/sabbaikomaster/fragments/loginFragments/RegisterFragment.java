@@ -48,6 +48,7 @@ public class RegisterFragment extends Fragment {
     ToggleButton togglePasswordVisibility;
     EditText name, EmailId, PhoneNumber, password;
     Button createAccount;
+    String deviceToken;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -59,6 +60,7 @@ public class RegisterFragment extends Fragment {
         this.context = context;
         this.requestQueue = MySingleton.getInstance(context).getRequestQueue();
         this.preferencesManager = new PreferencesManager(context);
+        this.deviceToken =  Commonutils.getDeviceId(context);
     }
 
 
@@ -132,6 +134,7 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onResponse(JSONObject response) {
                 String token = response.optString("token");
+                Log.d("token after Register", "Token:   " + token);
                 Toast.makeText(context, response.optString("message"), Toast.LENGTH_SHORT).show();
                 preferencesManager.UpdateJwtToken(token);
                 startActivity(new Intent(getActivity(), DashBoardManager.class));
@@ -178,7 +181,8 @@ public class RegisterFragment extends Fragment {
             object.put("phoneNumber", PhoneNumber.getText().toString());
             object.put("emailId", EmailId.getText().toString());
             object.put("password", password.getText().toString());
-            object.put("deviceID", Commonutils.getDeviceId(context));
+            object.put("deviceID", deviceToken);
+            preferencesManager.UpdateDeviceUniqueID(deviceToken);
         } catch (JSONException e) {
             Toast.makeText(context, "During Object Creation Error", Toast.LENGTH_SHORT).show();
         }

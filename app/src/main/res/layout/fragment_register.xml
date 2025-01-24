@@ -54,7 +54,9 @@
             android:ems="15"
             android:hint="Enter your Full Name"
             android:paddingStart="30dp"
-            android:textColor="@color/textcolor" />
+            android:textColor="@color/textcolor"
+            android:maxLength="50"
+            android:inputType="textPersonName"/>
 
         <TextView
             android:id="@+id/TextEmail"
@@ -80,7 +82,9 @@
             android:ems="15"
             android:hint="Enter your Email Address"
             android:paddingStart="30dp"
-            android:textColor="@color/textcolor" />
+            android:textColor="@color/textcolor"
+            android:maxLength="254"
+            android:inputType="textEmailAddress"/>
 
         <TextView
             android:id="@+id/TextPhoneNumber"

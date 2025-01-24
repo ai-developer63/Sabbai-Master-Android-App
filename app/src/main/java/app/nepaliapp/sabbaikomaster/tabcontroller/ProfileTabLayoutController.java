@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import app.nepaliapp.sabbaikomaster.fragments.profileTab.contactUs;
 import app.nepaliapp.sabbaikomaster.tabLayoutFragments.sample1Fragment;
 import app.nepaliapp.sabbaikomaster.tabLayoutFragments.sample2;
 
@@ -21,7 +22,7 @@ public class ProfileTabLayoutController extends FragmentStateAdapter {
         if (position == 0) {
             return new sample1Fragment();
         } else if (position == 1) {
-            return new sample2();
+            return new contactUs();
         }
         return null;
     }

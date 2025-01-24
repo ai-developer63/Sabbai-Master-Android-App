@@ -24,7 +24,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,11 +59,12 @@ public class AllSubjectsFragment extends Fragment {
     RequestQueue requestQueue;
     PreferencesManager preferencesManager;
     TextView textView;
-    ImageView  SearchClickAbleIcon;
+    ImageView SearchClickAbleIcon;
     EditText searchEditTxt;
     Boolean edittextVisible = false;
     JSONArray jsonArrayData;
     DashBoardManager dashBoardManager;
+
     public AllSubjectsFragment() {
 
     }
@@ -88,7 +88,7 @@ public class AllSubjectsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_subjects, container, false);
         recyclerView = view.findViewById(R.id.recyclerViewSubject);
-        textView= view.findViewById(R.id.textView);
+        textView = view.findViewById(R.id.textView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         RequestServer();
 
@@ -101,11 +101,30 @@ public class AllSubjectsFragment extends Fragment {
         searchEditTxt = view.findViewById(R.id.searchEditText);
         searchEditTxt.setVisibility(View.GONE);
         setupTextWatcher();
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            searchEditTxt.setText(
+                    bundle.getString("searchtag", " "));
+            RequestSearchServer(new onSuccessFetching() {
+                @Override
+                public void onSuccess(JSONArray response) {
+
+                    searchEditTxt.setVisibility(View.VISIBLE);
+                    triggerSearchLogic(searchEditTxt.getText().toString());
+                }
+
+                @Override
+                public void onError(String errormessage) {
+
+                }
+            });
+        }
+
         SearchClickAbleIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 edittextVisible = !edittextVisible;
-                if (edittextVisible ) {
+                if (edittextVisible) {
                     searchEditTxt.setVisibility(View.VISIBLE);
                 } else {
                     searchEditTxt.setVisibility(View.GONE);
@@ -181,6 +200,7 @@ public class AllSubjectsFragment extends Fragment {
                     message = "Timeout Error";
                 }
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+
             }
         }) {
             @Override
@@ -193,6 +213,7 @@ public class AllSubjectsFragment extends Fragment {
         requestQueue.add(arrayRequest);
 
     }
+
     private void delayAction(Runnable action) {
         new Handler(Looper.getMainLooper()).postDelayed(action, 3000);  // 2 seconds delay
     }
@@ -201,6 +222,26 @@ public class AllSubjectsFragment extends Fragment {
         searchEditTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if (jsonArrayData == null) return; // Ensure data is available
+
+                String searchText = s.toString().trim();
+
+                if (!TextUtils.isEmpty(searchText)) {
+                    try {
+                        JSONArray matchingArray = findMatchingObjects(searchText, jsonArrayData);
+                        if (isAdded()) { // Check if fragment is still added
+                            SubjectAdapter adapter = new SubjectAdapter(context, matchingArray, getParentFragmentManager());
+                            recyclerView.setAdapter(adapter);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    if (isAdded()) { // Check if fragment is still added
+                        SubjectAdapter adapter = new SubjectAdapter(context, jsonArrayData, getParentFragmentManager());
+                        recyclerView.setAdapter(adapter);
+                    }
+                }
             }
 
             @Override
@@ -239,7 +280,14 @@ public class AllSubjectsFragment extends Fragment {
         for (int i = 0; i < originalJsonArray.length(); i++) {
             JSONObject jsonObject = originalJsonArray.getJSONObject(i);
             String name = jsonObject.optString("shortDescription");
-            if (containsPartialMatch(name, searchText)) {
+            String searchTag = jsonObject.optString("searchTags");
+            String subjectName = jsonObject.optString("name");
+            String classes = jsonObject.optString("whichClass");
+
+            // Match against multiple fields
+            if (containsPartialMatch(name, searchText) ||
+                    containsPartialMatch(searchTag, searchText) ||
+                    containsPartialMatch(subjectName, searchText) || containsPartialMatch(classes, searchText)) {
                 matchingArray.put(jsonObject);
             }
         }
@@ -258,6 +306,7 @@ public class AllSubjectsFragment extends Fragment {
         }
         return false;
     }
+
     private void replaceFragment(Fragment fragment) {
         requireActivity().
                 getSupportFragmentManager()
@@ -266,4 +315,56 @@ public class AllSubjectsFragment extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
+
+    private void triggerSearchLogic(String searchText) {
+        if (jsonArrayData == null) return; // Ensure data is available
+
+        if (!TextUtils.isEmpty(searchText)) {
+            try {
+                JSONArray matchingArray = findMatchingObjects(searchText, jsonArrayData);
+                if (isAdded()) { // Check if fragment is still added
+                    SubjectAdapter adapter = new SubjectAdapter(context, matchingArray, getParentFragmentManager());
+                    recyclerView.setAdapter(adapter);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            if (isAdded()) { // Check if fragment is still added
+                SubjectAdapter adapter = new SubjectAdapter(context, jsonArrayData, getParentFragmentManager());
+                recyclerView.setAdapter(adapter);
+            }
+        }
+    }
+
+    private void RequestSearchServer(onSuccessFetching callback) {
+        Url url = new Url();
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url.getSubjects(), null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onError(error.toString());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + preferencesManager.getJwtToken());
+                return headers;
+            }
+        };
+        requestQueue.add(arrayRequest);
+    }
+
+    public interface onSuccessFetching {
+        void onSuccess(JSONArray response);
+
+        void onError(String errormessage);
+    }
+
+
 }

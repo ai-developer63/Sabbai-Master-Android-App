@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -40,6 +41,7 @@ import app.nepaliapp.sabbaikomaster.common.MySingleton;
 import app.nepaliapp.sabbaikomaster.common.PreferencesManager;
 import app.nepaliapp.sabbaikomaster.common.Url;
 import app.nepaliapp.sabbaikomaster.common.UserClassSelector;
+import app.nepaliapp.sabbaikomaster.fragmentManager.DashBoardManager;
 import app.nepaliapp.sabbaikomaster.tabcontroller.ProfileTabLayoutController;
 
 
@@ -87,8 +89,7 @@ public class ProfileFragment extends Fragment {
         logoutImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                preferencesManager.ClearingUserDataForLogout();
-                startActivity(new Intent(context.getApplicationContext(), MainActivity.class));
+showLogoutAlert();
             }
         });
 
@@ -211,7 +212,18 @@ if (callback != null){
         requestQueue.add(request);
     }
 
-
+    private void showLogoutAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Log Out");
+        builder.setMessage("Are you sure you want to Logout?");
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            preferencesManager.ClearingUserDataForLogout();
+            startActivity(new Intent(requireContext(), MainActivity.class));
+            requireActivity().finish();
+        });
+        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
 
 
 

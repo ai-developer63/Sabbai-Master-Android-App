@@ -110,7 +110,8 @@ public class HomeFragment extends Fragment {
                 HeaderPicasso.initializePicassoWithHeaders(context, "Authorization", "Bearer " + preferencesManager.getJwtToken());
                 Picasso.get().load(profileUrl).transform(new CircleTransform()).into(logoImage);
                 CategoryAdapter categoryAdapter = new CategoryAdapter(getContext(), response.optJSONArray("classes"), getParentFragmentManager());
-                categoryRecyclerView.setLayoutManager(new GridLayoutManager(context, 4));
+                GridLayoutManager layoutManager = new GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false);
+                categoryRecyclerView.setLayoutManager(layoutManager);
                 categoryRecyclerView.setAdapter(categoryAdapter);
                 SubjectAdapter adapter = new SubjectAdapter(context, response.optJSONArray("subjects"),getParentFragmentManager());
                 subjectRecyclerView.setLayoutManager(new LinearLayoutManager(context));
