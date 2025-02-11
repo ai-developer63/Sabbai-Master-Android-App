@@ -34,11 +34,12 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import app.nepaliapp.sabbaikomaster.Adapter.CategoryAdapter;
+import app.nepaliapp.sabbaikomaster.Adapter.ClassAdapter;
 import app.nepaliapp.sabbaikomaster.Adapter.SubjectAdapter;
 import app.nepaliapp.sabbaikomaster.MainActivity;
 import app.nepaliapp.sabbaikomaster.R;
@@ -48,6 +49,7 @@ import app.nepaliapp.sabbaikomaster.common.MySingleton;
 import app.nepaliapp.sabbaikomaster.common.PreferencesManager;
 import app.nepaliapp.sabbaikomaster.common.Url;
 import app.nepaliapp.sabbaikomaster.common.UserClassSelector;
+import app.nepaliapp.sabbaikomaster.fragmentManager.DashBoardManager;
 
 public class HomeFragment extends Fragment {
     Context context;
@@ -56,8 +58,10 @@ public class HomeFragment extends Fragment {
     ImageView logoImage;
     PreferencesManager preferencesManager;
     RecyclerView categoryRecyclerView, subjectRecyclerView;
+    DashBoardManager dashBoardManager;
     private ShimmerFrameLayout shimmerFrameLayout;
-
+    private Runnable delayedActionRunnable;
+    private boolean isPopupShown = false;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -67,6 +71,11 @@ public class HomeFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
+        if (context instanceof DashBoardManager) {
+            dashBoardManager = (DashBoardManager) context;
+        } else {
+            throw new ClassCastException(context + "must be DashBoardManager");
+        }
         this.requestQueue = MySingleton.getInstance(context).getRequestQueue();
         this.preferencesManager = new PreferencesManager(context);
     }
@@ -93,6 +102,13 @@ public class HomeFragment extends Fragment {
         classesRecyclerTxt.setVisibility(View.GONE);
         CoursesTxt.setVisibility(View.GONE);
         requestHomeData();
+        logoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dashBoardManager.setBottomNavigationSelected(5);
+                replaceFragment(new ProfileFragment());
+            }
+        });
         return view;
     }
 
@@ -109,16 +125,13 @@ public class HomeFragment extends Fragment {
                 welcomeTxt.setText(getGreetingMessage() + "\n" + "               " + name);
                 HeaderPicasso.initializePicassoWithHeaders(context, "Authorization", "Bearer " + preferencesManager.getJwtToken());
                 Picasso.get().load(profileUrl).transform(new CircleTransform()).into(logoImage);
-                CategoryAdapter categoryAdapter = new CategoryAdapter(getContext(), response.optJSONArray("classes"), getParentFragmentManager());
+                ClassAdapter classAdapter = new ClassAdapter(getContext(), response.optJSONArray("classes"), getParentFragmentManager());
                 GridLayoutManager layoutManager = new GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false);
                 categoryRecyclerView.setLayoutManager(layoutManager);
-                categoryRecyclerView.setAdapter(categoryAdapter);
-                SubjectAdapter adapter = new SubjectAdapter(context, response.optJSONArray("subjects"),getParentFragmentManager());
+                categoryRecyclerView.setAdapter(classAdapter);
+                SubjectAdapter adapter = new SubjectAdapter(context, response.optJSONArray("subjects"), getParentFragmentManager());
                 subjectRecyclerView.setLayoutManager(new LinearLayoutManager(context));
                 subjectRecyclerView.setAdapter(adapter);
-
-
-
 
                 NewsTxt.setText(response.optString("news"));
                 NewsTxt.setSelected(true);
@@ -129,19 +142,19 @@ public class HomeFragment extends Fragment {
                 subjectRecyclerView.setVisibility(View.VISIBLE);
                 NewsTxt.setVisibility(View.VISIBLE);
                 CoursesTxt.setVisibility(View.VISIBLE);
-                if(response.optString("news").equalsIgnoreCase("No message")){
-                    JSONArray classes =response.optJSONArray("classes");
+                if (response.optString("news").equalsIgnoreCase("No message")) {
+                    JSONArray classes = response.optJSONArray("classes");
                     assert classes != null;
-                    String [] classesName = new String[classes.length()+1];
-                    for (int i = 0; i < classes.length();i++){
+                    String[] classesName = new String[classes.length() + 1];
+                    for (int i = 0; i < classes.length(); i++) {
                         JSONObject object = classes.optJSONObject(i);
-                        classesName[i] =  object.optString("name","unknown");
-                        if (i==classes.length()-1){
-                            classesName[i+1] = "None of Above";
+                        classesName[i] = object.optString("name", "unknown");
+                        if (i == classes.length() - 1) {
+                            classesName[i + 1] = "None of Above";
                         }
                     }
                     delayAction(() -> {
-                        UserClassSelector.show(requireContext(),classesName);
+                        UserClassSelector.show(requireContext(), classesName);
                     });
 
                 }
@@ -163,7 +176,7 @@ public class HomeFragment extends Fragment {
                     try {
                         if (error.networkResponse != null && error.networkResponse.data != null) {
                             // Convert the error data to a string
-                            String errorData = new String(error.networkResponse.data, "UTF-8");
+                            String errorData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
 
                             // Parse the error JSON
                             JSONObject jsonError = new JSONObject(errorData);
@@ -223,6 +236,23 @@ public class HomeFragment extends Fragment {
     }
 
     private void delayAction(Runnable action) {
-        new Handler(Looper.getMainLooper()).postDelayed(action, 5000);  // 2 seconds delay
+        Handler handler = new Handler(Looper.getMainLooper());
+        if (!isPopupShown) {
+            isPopupShown = true;
+            delayedActionRunnable = action;
+            handler.postDelayed(() -> {
+                action.run();
+                isPopupShown = false; // Reset after showing
+            }, 5000); // 5 seconds delay
+        }
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        requireActivity().
+                getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.frameLayoutInMain, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

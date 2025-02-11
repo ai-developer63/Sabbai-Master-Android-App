@@ -32,30 +32,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/LayoutOfShortDescription"
-        android:layout_marginTop="35dp">
-
-        <TextView
-            android:id="@+id/LongDescriptionTopic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="Subject In Detail:"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+        android:layout_marginTop="15dp">
 
         <TextView
             android:id="@+id/textofLongDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/LongDescriptionTopic"
             android:layout_marginTop="10dp"
             android:text="Sample text of Long descriptiuon for Sample looking System"
             android:textSize="18sp"
-            android:textAlignment="center"
             android:textColor="@color/black"
-            android:textStyle="italic"
             android:layout_margin="10dp"
             />
 

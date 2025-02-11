@@ -30,7 +30,6 @@
             android:layout_centerInParent="true"
             android:text="Modern Button"
             android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="15sp" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

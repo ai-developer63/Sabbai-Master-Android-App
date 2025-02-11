@@ -5,14 +5,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import app.nepaliapp.sabbaikomaster.fragments.notificationFragments.PersonalNotificationFragments;
+import app.nepaliapp.sabbaikomaster.fragments.notificationFragments.YoutubeVideoFragments;
 import app.nepaliapp.sabbaikomaster.fragments.profileTab.ContactUs;
 import app.nepaliapp.sabbaikomaster.fragments.profileTab.LearningAchivementsFragments;
-import app.nepaliapp.sabbaikomaster.tabLayoutFragments.sample1Fragment;
 
-public class ProfileTabLayoutController extends FragmentStateAdapter {
+public class NotificationsTabLayoutController extends FragmentStateAdapter {
 
-
-    public ProfileTabLayoutController(@NonNull FragmentActivity fragmentActivity) {
+    public NotificationsTabLayoutController(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
 
@@ -20,9 +20,9 @@ public class ProfileTabLayoutController extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         if (position == 0) {
-            return new LearningAchivementsFragments();
+            return new PersonalNotificationFragments();
         } else if (position == 1) {
-            return new ContactUs();
+            return new YoutubeVideoFragments();
         }
         return null;
     }

@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import app.nepaliapp.sabbaikomaster.R;
+import app.nepaliapp.sabbaikomaster.common.ToastUtils;
 import app.nepaliapp.sabbaikomaster.fragments.subjectFragments.ChapterVideoCardViewer;
 
 public class ChapterCardBtnAdapter extends RecyclerView.Adapter<ChapterCardBtnAdapter.ViewHolder> {
@@ -58,7 +59,8 @@ public class ChapterCardBtnAdapter extends RecyclerView.Adapter<ChapterCardBtnAd
                         chapterVideoCardViewer.setArguments(bundle);
                         replaceFragments(chapterVideoCardViewer);
                     }else {
-                        Toast.makeText(context, "No Item Present", Toast.LENGTH_SHORT).show();
+                        ToastUtils.
+                                showToast(context,"No chapters");
                     }
                 }
             });

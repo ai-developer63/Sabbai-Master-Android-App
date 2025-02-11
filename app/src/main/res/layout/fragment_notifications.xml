@@ -1,15 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.dashboardFragements.NotificationsFragment">
+    android:background="@color/white">
 
     <RelativeLayout
         android:id="@+id/Toplayout"
         android:layout_width="match_parent"
-        android:layout_height="15dp"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:background="@drawable/home_design_upper"/>
+        android:background="@drawable/home_design_upper">
 
+        <TextView
+            android:id="@+id/headingTopic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notification"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+    <!-- Scrollable content container -->
+    <ScrollView
+        android:id="@+id/notificationScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/notificationsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Section 1: Scheduled Notifications -->
+            <TextView
+                android:id="@+id/scheduleSectionHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Scheduled Notifications"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/logocolor" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/scheduleCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <!-- Schedule Title -->
+                    <TextView
+                        android:id="@+id/scheduleTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Upcoming Event Title"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
+
+                    <!-- Schedule Description -->
+                    <TextView
+                        android:id="@+id/scheduleDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/scheduleTitle"
+                        android:layout_marginTop="4dp"
+                        android:text="Details about the scheduled event..."
+                        android:textSize="14sp"
+                        android:textColor="@color/Colour_After_click" />
+
+                    <!-- Schedule Time -->
+                    <TextView
+                        android:id="@+id/scheduleTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="10:00 AM"
+                        android:textSize="14sp"
+                        android:textStyle="italic"
+                        android:textColor="@color/colorAccentDemo" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:tabTextColor="@color/black"
+                android:layout_marginTop="10dp"
+                />
+
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

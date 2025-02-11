@@ -34,7 +34,7 @@ public class DeviceIdChecker implements DefaultLifecycleObserver {
         public void run() {
             ReceieveDeviceId();
             // Schedule again after 10 minutes
-            handler.postDelayed(this, 20 * 1000); // 10 minutes
+            handler.postDelayed(this, 60 * 1000); // 10 minutes
         }
     };
 

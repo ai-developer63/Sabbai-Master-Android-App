@@ -1,11 +1,13 @@
 package app.nepaliapp.sabbaikomaster.fragments.dashboardFragements;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -42,6 +44,7 @@ public class UserCoursesFragment extends Fragment {
     PreferencesManager preferencesManager;
     Button enrollBtn;
     DashBoardManager dashBoardManager;
+    ProgressBar progressDialog;
     public UserCoursesFragment() {
         // Required empty public constructor
     }
@@ -68,6 +71,7 @@ public class UserCoursesFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         enrollBtn = view.findViewById(R.id.enrollBtn);
+        progressDialog =  view.findViewById(R.id.progressBar);
         enrollBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,9 +91,12 @@ public class UserCoursesFragment extends Fragment {
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url.getUserPurchasedSubject(), null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
+                progressDialog.setVisibility(View.VISIBLE);
                 if (response.length() == 0) {
+                    progressDialog.setVisibility(View.GONE);
                     relativeLayout.setVisibility(View.VISIBLE);
                 } else {
+                    progressDialog.setVisibility(View.GONE);
                     relativeLayout.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
                     SubjecAdapterWithDay adapter = new SubjecAdapterWithDay(requireContext(), response, getParentFragmentManager());

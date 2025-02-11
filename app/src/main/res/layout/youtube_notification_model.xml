@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/youtubeCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- YouTube Thumbnail/Image -->
+            <ImageView
+                android:id="@+id/notificationIcon"
+                android:layout_width="100dp"
+                android:layout_height="75dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/videoicon"
+                android:contentDescription="YouTube Video Thumbnail" />
+
+            <!-- Video Title -->
+            <TextView
+                android:id="@+id/personalNotification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/notificationIcon"
+                android:layout_marginStart="12dp"
+                android:text="Video Title Goes Here"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/black" />
+
+            <!-- Video Upload Date -->
+            <TextView
+                android:id="@+id/dateNotification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/personalNotification"
+                android:layout_toEndOf="@id/notificationIcon"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="4dp"
+                android:text="Uploaded on 01 Jan 2025"
+                android:textSize="14sp"
+                android:textColor="@color/Colour_After_click" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+

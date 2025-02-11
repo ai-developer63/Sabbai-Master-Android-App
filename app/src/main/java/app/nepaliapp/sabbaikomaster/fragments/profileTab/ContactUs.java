@@ -16,11 +16,11 @@ import androidx.fragment.app.Fragment;
 import app.nepaliapp.sabbaikomaster.R;
 
 
-public class contactUs extends Fragment {
+public class ContactUs extends Fragment {
     private static final int REQUEST_CALL = 1;
     CardView callBtn, chatBtn;
 
-    public contactUs() {
+    public ContactUs() {
         // Required empty public constructor
     }
 

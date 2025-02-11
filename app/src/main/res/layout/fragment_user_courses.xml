@@ -23,6 +23,13 @@
             android:layout_marginTop="10dp"/>
     </RelativeLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
+
     <RelativeLayout
         android:id="@+id/noUserCourseView"
         android:layout_width="match_parent"

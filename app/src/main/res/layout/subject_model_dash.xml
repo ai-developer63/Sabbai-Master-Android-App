@@ -1,136 +1,139 @@
-<!-- item_layout_card.xml -->
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/subjectCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
-    android:layout_margin="8dp"
-    android:background="?android:attr/selectableItemBackground"
-    android:padding="16dp"
-    android:layout_marginBottom="10dp"
-    android:id="@+id/subjectCard">
+    app:cardElevation="6dp"
+    android:layout_margin="12dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:backgroundTint="#FFFFFF"
+    android:padding="16dp">
 
-    <!-- Relative Layout inside CardView -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Logo on the left -->
+        <!-- Logo Image -->
         <ImageView
             android:id="@+id/logoImage"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/ic_launcher" />
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_launcher_round"
+            android:backgroundTint="#FFB630"
+            />
 
-        <!-- Tags container (relative to logo) -->
+        <!-- Tags -->
         <LinearLayout
             android:id="@+id/tagsContainer"
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/logoImage"
             android:layout_marginStart="8dp"
-            android:gravity="start"
-            android:layout_alignTop="@id/logoImage"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tagLive"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:text="  Live  "
+                android:text="Live"
+                android:padding="6dp"
+                android:backgroundTint="#DC3333"
                 android:background="@drawable/tag_background"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
-                android:layout_marginRight="10dp" />
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:id="@+id/tagBsc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:text="  BSc 1st Year  "
+                android:text="BSc 1st Year"
+                android:padding="6dp"
+                android:backgroundTint="#4A4A4A"
                 android:background="@drawable/tag_background"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
-                android:layout_marginRight="10dp" />
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:id="@+id/tagAnimated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:text="  Animated  "
+                android:text="Animated"
+                android:padding="6dp"
+                android:backgroundTint="#FFB630 "
                 android:background="@drawable/tag_background"
                 android:textColor="#FFFFFF"
-                android:textSize="12sp"
-                android:layout_marginRight="10dp" />
-
+                android:textSize="12sp" />
         </LinearLayout>
 
-        <!-- Title (below tags and logo) -->
+        <!-- Title -->
         <TextView
             android:id="@+id/titleText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Course Title"
-            android:textSize="18sp"
-            android:textColor="#000000"
+            android:layout_below="@id/tagsContainer"
             android:layout_toEndOf="@id/logoImage"
             android:layout_marginStart="8dp"
-            android:layout_below="@id/tagsContainer"
-            android:maxLines="1"
+            android:layout_marginTop="8dp"
+            android:text="Course Title"
+            android:textSize="18sp"
+            android:textStyle="bold"
             android:ellipsize="end"
-            android:textStyle="bold"/>
+            android:singleLine="true"
+            android:textColor="#4B2A06" />
 
-        <!-- Description (below title) -->
+        <!-- Short Description -->
         <TextView
             android:id="@+id/shortDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="This is a short description of the course. It contains around 100 words or similar."
-            android:textSize="14sp"
-            android:textColor="#7f7f7f"
+            android:layout_below="@id/titleText"
             android:layout_toEndOf="@id/logoImage"
             android:layout_marginStart="8dp"
-            android:layout_below="@id/titleText"
-            android:maxLines="4"
-            android:ellipsize="end" />
+            android:layout_marginTop="4dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="This is a short description of the course. It highlights key features in just a few lines."
+            android:textSize="14sp"
+            android:textColor="#4A4A4A" />
 
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/shortDescription"
+            android:layout_alignParentEnd="true">
+        <!-- Price Section -->
         <TextView
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:text="Price:"
-            android:textSize="15sp"
-            android:textColor="#000000"
-            android:layout_below="@id/shortDescription"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="10dp"
-            android:layout_toStartOf="@id/priceNumber"
-            android:textStyle="bold"/>
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/priceNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textColor="#000000"
-            android:layout_below="@id/shortDescription"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/price"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="12dp"
             android:text="NPR 600"
-            android:layout_alignParentEnd="true"
+            android:textSize="16sp"
             android:textStyle="bold"
+            android:textColor="#4B2A06"
             android:layout_marginEnd="10dp"/>
-
-
-
+        </RelativeLayout>
     </RelativeLayout>
-
 </androidx.cardview.widget.CardView>

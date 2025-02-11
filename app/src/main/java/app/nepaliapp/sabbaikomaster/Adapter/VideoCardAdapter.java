@@ -39,6 +39,7 @@ import app.nepaliapp.sabbaikomaster.common.HeaderPicasso;
 import app.nepaliapp.sabbaikomaster.common.MySingleton;
 import app.nepaliapp.sabbaikomaster.common.PreferencesManager;
 import app.nepaliapp.sabbaikomaster.common.SubscriptionDialog;
+import app.nepaliapp.sabbaikomaster.common.ToastUtils;
 import app.nepaliapp.sabbaikomaster.common.Url;
 
 public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardAdapter.ViewHolder> {
@@ -47,6 +48,7 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardAdapter.View
     JSONArray array;
     PreferencesManager preferencesManager;
     RequestQueue requestQueue;
+
 
     public VideoCardAdapter(Context context, JSONArray array) {
         this.context = context;
@@ -80,6 +82,7 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardAdapter.View
                     @Override
                     public void onSuccess(boolean isPurchased) {
                         if (isPurchased) {
+                            Log.d("object for view", object.toString());
                             Intent intent = new Intent(context, VideoPlayingActivity.class);
                             intent.putExtra("videoUrl", object.optString("videoUrl"));
                             intent.putExtra("title", object.optString("title"));
@@ -87,7 +90,8 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardAdapter.View
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);
                         }else {
-                            SubscriptionDialog.show(context);
+//request part
+                           ToastUtils.showToast(context,"Sorry");
                         }
                     }
 

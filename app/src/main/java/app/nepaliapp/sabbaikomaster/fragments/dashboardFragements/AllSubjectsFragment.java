@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +65,7 @@ public class AllSubjectsFragment extends Fragment {
     Boolean edittextVisible = false;
     JSONArray jsonArrayData;
     DashBoardManager dashBoardManager;
+    ProgressBar progressBar;
 
     public AllSubjectsFragment() {
 
@@ -99,27 +101,29 @@ public class AllSubjectsFragment extends Fragment {
         DrawableCompat.setTint(tintedDrawable, ResourcesCompat.getColor(context.getResources(), R.color.colorOnprimaryDemo, context.getTheme()));
         SearchClickAbleIcon.setImageDrawable(tintedDrawable);
         searchEditTxt = view.findViewById(R.id.searchEditText);
-        searchEditTxt.setVisibility(View.GONE);
+        progressBar = view.findViewById(R.id.progressBar);
+
         setupTextWatcher();
         Bundle bundle = getArguments();
         if (bundle != null) {
+showProgressbar();
             searchEditTxt.setText(
                     bundle.getString("searchtag", " "));
             RequestSearchServer(new onSuccessFetching() {
                 @Override
                 public void onSuccess(JSONArray response) {
-
-                    searchEditTxt.setVisibility(View.VISIBLE);
                     triggerSearchLogic(searchEditTxt.getText().toString());
+                    hideProgressbar();
                 }
 
                 @Override
                 public void onError(String errormessage) {
-
+hideProgressbar();
                 }
             });
         }
 
+        searchEditTxt.setVisibility(View.GONE);
         SearchClickAbleIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,6 +153,7 @@ public class AllSubjectsFragment extends Fragment {
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url.getSubjects(), null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
+                hideProgressbar();
                 jsonArrayData = response;
                 if (isAdded()) {
                     SubjectAdapter adapter = new SubjectAdapter(context, response, getParentFragmentManager());
@@ -167,7 +172,7 @@ public class AllSubjectsFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                hideProgressbar();
                 String message = "Unknown Error";
                 if (error instanceof AuthFailureError) {
                     message = "Login Expired....";
@@ -367,4 +372,15 @@ public class AllSubjectsFragment extends Fragment {
     }
 
 
+    private void showProgressbar(){
+        progressBar.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        textView.setVisibility(View.GONE);
+    }
+
+    private void hideProgressbar(){
+        progressBar.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+        textView.setVisibility(View.VISIBLE);
+    }
 }

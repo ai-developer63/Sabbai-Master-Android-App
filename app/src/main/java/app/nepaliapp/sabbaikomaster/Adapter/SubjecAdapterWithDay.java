@@ -74,10 +74,8 @@ public class SubjecAdapterWithDay extends RecyclerView.Adapter<SubjecAdapterWith
             }
         });
 
-
-        HeaderPicasso.initializePicassoWithHeaders(context, "Authorization", "Bearer " + preferencesManager.getJwtToken());
-        Picasso.get().load(logoUrl).into(holder.logoImage);
-
+//        HeaderPicasso.initializePicassoWithHeaders(context, "Authorization", "Bearer " + preferencesManager.getJwtToken());
+//        Picasso.get().load(logoUrl).into(holder.logoImage);
 
     }
 

@@ -2,7 +2,6 @@ package app.nepaliapp.sabbaikomaster.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,14 +26,14 @@ import app.nepaliapp.sabbaikomaster.common.PreferencesManager;
 import app.nepaliapp.sabbaikomaster.fragmentManager.DashBoardManager;
 import app.nepaliapp.sabbaikomaster.fragments.dashboardFragements.AllSubjectsFragment;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
+public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ViewHolder> {
     Context context;
     JSONArray array;
     FragmentManager fragmentManager;
     PreferencesManager preferencesManager;
     DashBoardManager dashBoardManager;
 
-    public CategoryAdapter(Context context, JSONArray array, FragmentManager fragmentManager) {
+    public ClassAdapter(Context context, JSONArray array, FragmentManager fragmentManager) {
         this.context = context;
         this.array = array;
         this.fragmentManager = fragmentManager;
@@ -48,7 +47,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @NonNull
     @Override
-    public CategoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ClassAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.categories_item, parent, false);
         return new ViewHolder(view);
     }
@@ -96,6 +95,7 @@ try {
     }
     private void replaceFragments(Fragment fragment) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+       fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.replace(R.id.frameLayoutInMain, fragment);
         fragmentTransaction.commit();
     }

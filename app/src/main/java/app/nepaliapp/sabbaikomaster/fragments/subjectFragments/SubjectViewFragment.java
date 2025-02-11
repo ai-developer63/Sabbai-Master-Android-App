@@ -7,8 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,10 +31,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +47,7 @@ import app.nepaliapp.sabbaikomaster.R;
 import app.nepaliapp.sabbaikomaster.common.HeaderPicasso;
 import app.nepaliapp.sabbaikomaster.common.MySingleton;
 import app.nepaliapp.sabbaikomaster.common.PreferencesManager;
+import app.nepaliapp.sabbaikomaster.common.SubscriptionDialog;
 import app.nepaliapp.sabbaikomaster.common.Url;
 import app.nepaliapp.sabbaikomaster.fragmentManager.DashBoardManager;
 import app.nepaliapp.sabbaikomaster.fragments.dashboardFragements.AllSubjectsFragment;
@@ -53,9 +60,12 @@ public class SubjectViewFragment extends Fragment {
     RequestQueue requestQueue;
     PreferencesManager preferencesManager;
     ImageButton backBtn;
-    TextView subjectTitle;
-    ImageView subjectLogoImage;
+    TextView subjectTitle, coursesPrice;
+    ImageView subjectLogoImage, pricecloseBtn;
     DashBoardManager dashBoardManager;
+    Button purchaseBtn;
+    RelativeLayout purchasedBtnlayout;
+    YouTubePlayerView youTubePlayerView;
 
     public SubjectViewFragment() {
         // Required empty public constructor
@@ -83,10 +93,24 @@ public class SubjectViewFragment extends Fragment {
         backBtn = view.findViewById(R.id.backBtn);
         subjectTitle = view.findViewById(R.id.headingTopic);
         subjectLogoImage = view.findViewById(R.id.subjectImage);
+        coursesPrice = view.findViewById(R.id.coursePrice);
+        purchasedBtnlayout =  view.findViewById(R.id.userInteractionSection);
+        purchaseBtn = view.findViewById(R.id.purchaseButton);
+        pricecloseBtn = view.findViewById(R.id.priceCloseIcon);
+        youTubePlayerView = view.findViewById(R.id.videoPlaceholder);
+        getLifecycle().addObserver(youTubePlayerView);
+        pricecloseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                purchasedBtnlayout.setVisibility(View.GONE);
+            }
+        });
+
         Bundle bundle = getArguments();
         assert bundle != null;
         String subjectId = bundle.getString("subjectId");
-        String fromwehere = bundle.getString("subjectBackHint","Description");
+        String fromwehere = bundle.getString("subjectBackHint", "Description");
+
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,16 +119,29 @@ public class SubjectViewFragment extends Fragment {
             }
         });
 
+
+
         handleBackPress();
 
         getSubjectData(subjectId);
 
 
-setupViewPagerAndTabs(fromwehere);
+
+        setupViewPagerAndTabs(fromwehere);
 
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+
+    private void setupVideoPlayer(String videoKey) {
+        youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+            @Override
+            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                youTubePlayer.cueVideo(videoKey, 0);
+            }
+        });
     }
 
     private void setupViewPagerAndTabs(String positioner) {
@@ -120,19 +157,20 @@ setupViewPagerAndTabs(fromwehere);
                 }
             }).attach();
             int position = getTabPosition(positioner);
-            Log.d("TAG", "setupViewPagerAndTabs: "+position);
+            Log.d("TAG", "setupViewPagerAndTabs: " + position);
             viewPager.setCurrentItem(position, true);
 
         }
     }
 
-    private int getTabPosition(String positioner){
+    private int getTabPosition(String positioner) {
         switch (positioner) {
             case "Description":
                 return 0;
             case "Topics":
                 return 1;
-            default: return 0;
+            default:
+                return 0;
         }
     }
 
@@ -154,16 +192,34 @@ setupViewPagerAndTabs(fromwehere);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url.getSubjectDetail(subjectId), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                Log.d("View Subject wala", response.toString());
                 subjectTitle.setText(response.optString("name"));
                 HeaderPicasso.initializePicassoWithHeaders(requireContext(), "Authorization", "Bearer " + preferencesManager.getJwtToken());
                 Picasso.get().load(response.optString("url")).into(subjectLogoImage);
+                coursesPrice.setText(String.format("%s%s", requireContext().getString(R.string.ruppes), response.optString("price")));
+                 String videoKey=response.optString("syallbusVideoId");
+                if(videoKey.isEmpty()|| videoKey.isBlank()||videoKey.equalsIgnoreCase("no Video")){
+                    subjectLogoImage.setVisibility(View.VISIBLE);
+                    youTubePlayerView.setVisibility(View.GONE);
+                }else {
+                    setupVideoPlayer(videoKey);
+                }
+               if (!response.optBoolean("isPurchased")){
+                   purchasedBtnlayout.setVisibility(View.VISIBLE);
+               }
 
+                purchaseBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        SubscriptionDialog.show(requireContext(),response.optString("id"),response.optString("name"),response.optString("price"));
+                    }
+                });
                 // Send data to fragments via adapter
                 String description = response.optString("shortDescription", "No description available.");
                 String topics = response.optString("longDescription", "No topics available.");
                 SubjectTabLayoutController adapter = (SubjectTabLayoutController) viewPager.getAdapter();
                 if (adapter != null) {
-                    adapter.updateData(description, topics,response.optJSONArray("topics"));
+                    adapter.updateData(description, topics, response.optJSONArray("topics"));
                 }
             }
         }, new Response.ErrorListener() {
@@ -180,7 +236,7 @@ setupViewPagerAndTabs(fromwehere);
                     try {
                         if (error.networkResponse != null && error.networkResponse.data != null) {
                             // Convert the error data to a string
-                            String errorData = new String(error.networkResponse.data, "UTF-8");
+                            String errorData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
 
                             // Parse the error JSON
                             JSONObject jsonError = new JSONObject(errorData);

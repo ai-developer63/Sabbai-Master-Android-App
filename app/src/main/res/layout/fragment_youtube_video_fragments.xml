@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.notificationFragments.YoutubeVideoFragments">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/youtubeVideo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/youtubeVideo"
+        android:text="No Video Found for your Class "
+        android:textSize="18sp"
+        android:textColor="@color/Colour_After_click"
+        android:textAlignment="center"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"/>
+
+</RelativeLayout>

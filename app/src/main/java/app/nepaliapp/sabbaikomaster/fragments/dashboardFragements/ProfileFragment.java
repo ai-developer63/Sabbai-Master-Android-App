@@ -41,7 +41,6 @@ import app.nepaliapp.sabbaikomaster.common.MySingleton;
 import app.nepaliapp.sabbaikomaster.common.PreferencesManager;
 import app.nepaliapp.sabbaikomaster.common.Url;
 import app.nepaliapp.sabbaikomaster.common.UserClassSelector;
-import app.nepaliapp.sabbaikomaster.fragmentManager.DashBoardManager;
 import app.nepaliapp.sabbaikomaster.tabcontroller.ProfileTabLayoutController;
 
 
@@ -58,6 +57,21 @@ public class ProfileFragment extends Fragment {
 
     public ProfileFragment() {
         // Required empty public constructor
+    }
+
+    private static float calculateDynamicTextSize(int length) {
+        float maxSize = 18f;
+        float minSize = 13f; // Minimum size for very long emails
+        float lengthLimit = 70f; // Maximum length before hitting the smallest size
+
+        // Calculate size incrementally between maxSize and minSize
+        if (length <= 18) {
+            return maxSize;
+        } else {
+            float sizeStep = (maxSize - minSize) / (lengthLimit - 18); // Decrease per character
+            float textSize = maxSize - ((length - 18) * sizeStep);
+            return Math.max(minSize, textSize); // Ensure it doesn't drop below minSize
+        }
     }
 
     @Override
@@ -78,7 +92,7 @@ public class ProfileFragment extends Fragment {
         viewPager2.setAdapter(adapter);
         new TabLayoutMediator(tab, viewPager2, (tab, position) -> {
             if (position == 0) {
-                tab.setText("Routine");
+                tab.setText("Your Progress");
             } else if (position == 1) {
                 tab.setText("Contact Us");
             }
@@ -89,7 +103,7 @@ public class ProfileFragment extends Fragment {
         logoutImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-showLogoutAlert();
+                showLogoutAlert();
             }
         });
 
@@ -99,16 +113,16 @@ showLogoutAlert();
                 getClasses(new onSuccessClass() {
                     @Override
                     public void onSuccess(JSONArray response) {
-                        assert response!= null;
-                        String [] classesName = new String[response.length()+1];
-                        for (int i = 0; i < response.length();i++){
+                        assert response != null;
+                        String[] classesName = new String[response.length() + 1];
+                        for (int i = 0; i < response.length(); i++) {
                             JSONObject object = response.optJSONObject(i);
-                            classesName[i] =  object.optString("name","unknown");
-                            if (i==response.length()-1){
-                                classesName[i+1] = "None of Above";
+                            classesName[i] = object.optString("name", "unknown");
+                            if (i == response.length() - 1) {
+                                classesName[i + 1] = "None of Above";
                             }
                         }
-                        UserClassSelector.show(context,classesName);
+                        UserClassSelector.show(context, classesName);
                     }
 
                     @Override
@@ -116,7 +130,7 @@ showLogoutAlert();
                         Toast.makeText(context, errormessage, Toast.LENGTH_SHORT).show();
                     }
                 });
-                
+
             }
         });
 
@@ -139,23 +153,13 @@ showLogoutAlert();
 
     }
 
-
-
-
-    public interface onSuccessClass{
-void onSuccess(JSONArray response);
-void onError(String errormessage);
-
-    }
-
-
-    private void getClasses(onSuccessClass callback){
+    private void getClasses(onSuccessClass callback) {
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url.getClasses(), null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-if (callback != null){
-    callback.onSuccess(response);
-}
+                if (callback != null) {
+                    callback.onSuccess(response);
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -170,24 +174,24 @@ if (callback != null){
     }
 
 
-
-
     private void getUserData() {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url.getProfile(), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 UserName.setText(response.optString("name"));
                 UserEmail.setText(response.optString("email"));
+                float textSize = calculateDynamicTextSize(response.optString("email").length());
+                UserEmail.setTextSize(textSize);
                 UserPhone.setText(response.optString("phoneNumber"));
                 if (response.optString("selectedClass").isEmpty()) {
                     SelectedClass.setText("Choose Class");
                 } else {
-                    if (response.optString("selectedClass").equalsIgnoreCase("None of Above")){
+                    if (response.optString("selectedClass").equalsIgnoreCase("None of Above")) {
                         SelectedClass.setText("Choose a class");
-                    }else {
+                    } else {
                         SelectedClass.setText(response.optString("selectedClass"));
                     }
-                    }
+                }
 
                 HeaderPicasso.initializePicassoWithHeaders(context, "Authorization", "Bearer " + preferencesManager.getJwtToken());
                 Picasso.get().load(response.optString("profileImage")).transform(new CircleTransform()).into(profileImage);
@@ -225,6 +229,12 @@ if (callback != null){
         builder.show();
     }
 
+    public interface onSuccessClass {
+        void onSuccess(JSONArray response);
+
+        void onError(String errormessage);
+
+    }
 
 
 }

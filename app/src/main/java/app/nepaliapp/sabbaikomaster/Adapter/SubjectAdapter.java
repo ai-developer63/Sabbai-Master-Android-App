@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import app.nepaliapp.sabbaikomaster.R;
 import app.nepaliapp.sabbaikomaster.common.HeaderPicasso;
 import app.nepaliapp.sabbaikomaster.common.PreferencesManager;
+import app.nepaliapp.sabbaikomaster.fragmentManager.DashBoardManager;
 import app.nepaliapp.sabbaikomaster.fragments.subjectFragments.SubjectViewFragment;
 
 public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHolder> {
@@ -32,12 +33,17 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
     JSONArray array;
     PreferencesManager preferencesManager;
     FragmentManager fragmentManager;
-
+    DashBoardManager dashBoardManager;
     public SubjectAdapter(Context context, JSONArray array, FragmentManager fragmentManager) {
         this.context = context;
         this.array = array;
         this.preferencesManager = new PreferencesManager(context);
         this.fragmentManager = fragmentManager;
+        if (context instanceof DashBoardManager) {
+            dashBoardManager = (DashBoardManager) context;
+        } else {
+            throw new ClassCastException(context + "must be DashBoardManager");
+        }
     }
 
     @NonNull
@@ -61,7 +67,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
         holder.islive.setVisibility(islive ? View.VISIBLE : View.GONE);
         holder.isAnimated.setVisibility(isAnimated ? View.VISIBLE : View.GONE);
         holder.classTag.setText(jsonObject.optString("whichClass"));
-        holder.Price.setText("NRP"+" "+jsonObject.optString("price"));
+        holder.Price.setText(String.format("%s%s", context.getString(R.string.ruppes), jsonObject.optString("price")));
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,13 +75,14 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
                 bundle.putString("subjectId", jsonObject.optString("id"));
                 SubjectViewFragment subjectViewFragment = new SubjectViewFragment();
                 subjectViewFragment.setArguments(bundle);
+                dashBoardManager.setBottomNavigationSelected(2);
                 replaceFragments(subjectViewFragment);
             }
         });
 
 
-        HeaderPicasso.initializePicassoWithHeaders(context, "Authorization", "Bearer " + preferencesManager.getJwtToken());
-        Picasso.get().load(logoUrl).into(holder.logoImage);
+//        HeaderPicasso.initializePicassoWithHeaders(context, "Authorization", "Bearer " + preferencesManager.getJwtToken());
+//        Picasso.get().load(logoUrl).into(holder.logoImage);
 
 
     }

@@ -1,6 +1,7 @@
 package app.nepaliapp.sabbaikomaster.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import app.nepaliapp.sabbaikomaster.R;
 import app.nepaliapp.sabbaikomaster.common.PreferencesManager;
@@ -36,10 +39,25 @@ public class VideoAdapterForVideoViewCard extends RecyclerView.Adapter<VideoAdap
 
     @Override
     public void onBindViewHolder(@NonNull VideoAdapterForVideoViewCard.VideoViewHolder holder, int position) {
-        holder.subTopicsName.setText(array.optJSONObject(position).optString("name"));
+        String playingName = array.optJSONObject(position).optString("name");
+        holder.subTopicsName.setText(playingName);
         JSONArray videoArray = array.optJSONObject(position).optJSONArray("videos");
+        JSONArray updatedVideoArray = new JSONArray();
+        if (videoArray != null) {
+            for (int i = 0; i < videoArray.length(); i++) {
+                try {
+                    JSONObject videoObject = videoArray.getJSONObject(i);
+                    if (!videoObject.optString("name").equals(playingName)) {
+                        updatedVideoArray.put(videoObject);
+                    }
+                } catch (JSONException e) {
+                }
+            }
+        }
+        Log.d("Video Array at playing part", videoArray.toString());
+
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        VideoCardAdapter videoCardAdapter = new VideoCardAdapter(context, videoArray);
+        VideoCardAdapter videoCardAdapter = new VideoCardAdapter(context, updatedVideoArray);
         holder.recyclerView.setAdapter(videoCardAdapter);
     }
 

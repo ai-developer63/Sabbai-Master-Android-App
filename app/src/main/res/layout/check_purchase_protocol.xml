@@ -1,61 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:layout_margin="24dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp">
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/notification_icon"
-        android:layout_gravity="center"
-        app:tint="@color/colorAccentDemo" />
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="OOPS!"
-        android:textStyle="bold"
-        android:textColor="@color/colorAccentDemo"
-        android:textSize="40sp"
-        android:gravity="center"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="You Haven't Purchased Yet"
-        android:textStyle="bold"
-        android:textColor="@color/colorAccentDemo"
-        android:textSize="25sp"
-        android:gravity="center"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Request Now By Clicking Below Button"
-        android:textStyle="bold"
-        android:textColor="@color/colorAccentDemo"
-        android:textSize="18sp"
-        android:gravity="center"/>
+        android:background="@color/white"
+        android:padding="16dp">
 
-    <EditText
-        android:id="@+id/Usermessage"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="If any Additional Demand Type Here..."
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/edittextdesign"
-        android:ems="15"
-        android:textAlignment="center"/>
+        <!-- Header Section -->
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/logocolor"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:layout_margin="16dp"
+            android:paddingBottom="32dp">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnRetry"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="50dp"
-        android:textAllCaps="true"
-        android:text="Purchase Now"
-        android:background="@drawable/button_shape"
-        android:textColor="@color/colorOnprimaryDemo"/>
-</LinearLayout>
+            <TextView
+                android:id="@+id/tvSubjectName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Subject Name"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+        <!-- Price Section -->
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/header"
+            android:layout_marginTop="12dp"
+            android:text="रु 500"
+            android:textColor="@color/logocolor"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:shadowColor="#22000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            />
+
+        <!-- Content Section -->
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvPrice"
+            android:layout_marginTop="16dp"
+            android:text="Access available until your  Exam Completes!"
+            android:textColor="#666"
+            android:textSize="16sp"
+            android:lineSpacingMultiplier="1.2"
+            android:gravity="center"
+            android:paddingHorizontal="16dp"/>
+
+        <!-- Batch Input Field -->
+        <EditText
+            android:id="@+id/etBatchNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text"
+            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="16dp"
+            android:hint="Which year ?? Re or Regular"
+            android:background="@drawable/edittextdesign"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:maxLength="100"
+            android:padding="14dp"/>
+
+
+
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etBatchNumber"
+            android:layout_marginTop="32dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="8dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancel"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="Cancel"
+                app:strokeColor="@color/logocolor"
+                app:strokeWidth="1dp"
+                android:textColor="@color/logocolor"
+                app:cornerRadius="24dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPurchase"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/logocolor"
+                android:text="Purchase"
+                android:textColor="@color/white"
+                app:cornerRadius="24dp"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

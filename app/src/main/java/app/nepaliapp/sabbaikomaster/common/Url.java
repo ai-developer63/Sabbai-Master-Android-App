@@ -2,8 +2,8 @@ package app.nepaliapp.sabbaikomaster.common;
 
 public class Url {
     String url= "https://raw.githubusercontent.com/ai-developer63/just/gh-pages";
-//    String serverUrl="https://sabbaikomaster.centralindia.cloudapp.azure.com";
-    String serverUrl ="https://gc5tdmq1-8080.inc1.devtunnels.ms";
+    String serverUrl="https://sabbaikomaster.centralindia.cloudapp.azure.com";
+//    String serverUrl ="https://gc5tdmq1-8080.inc1.devtunnels.ms";
     String app_checkup="/appcheck";
     String login="/api/auth/login";
     String register ="/api/auth/register";
@@ -22,6 +22,12 @@ public class Url {
     String updateClass = "/api/profileupdate/selectedClass/";
 
     String classes = "/api/getAllClasses";
+
+    String requestPurchase = "/api/requestPurchase";
+
+    public String getRequestPurchase() {
+        return serverUrl+requestPurchase;
+    }
 
     public String getClasses() {
         return serverUrl+classes;
