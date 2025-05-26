@@ -3,47 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.dashboardFragements.AllSubjectsFragment">
-
 
     <RelativeLayout
         android:id="@+id/Toplayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@drawable/home_design_upper" >
-
-        <TextView
-            android:layout_alignParentTop="true"
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:text="All Courses"
-            android:textColor="@color/white"
-            android:textSize="23sp"
-            android:layout_marginTop="10dp"/>
-
-        <!-- Search bar -->
-        <EditText
-            android:layout_marginTop="19dp"
-            android:layout_below="@id/name"
-            android:id="@+id/searchEditText"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:drawablePadding="8dp"
-            android:hint="Search Subjects ! ! ! ! ! "
-            android:paddingStart="36dp"
-            android:paddingEnd="16dp"
-            android:background="@drawable/rounded_edittext_background"
-            android:inputType="text"
-            android:textColorHint="#808080"
-            android:textColor="#000000"
-            android:layout_marginBottom="10dp"/>
+        android:background="@drawable/home_design_upper"
+        android:paddingBottom="10dp"> <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="All Courses"
+        android:textColor="@color/white"
+        android:textSize="23sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
 
         <ImageView
             android:id="@+id/searchIcon"
@@ -51,36 +31,66 @@
             android:layout_height="30dp"
             android:src="@drawable/search_icon"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginEnd="16dp"
+            android:layout_alignTop="@id/name"      android:layout_alignBottom="@id/name"  android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless" /> <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/name"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="5dp"      android:background="@drawable/rounded_edittext_background"
+            android:hint="Search Subjects ! ! ! ! ! "
+            android:inputType="text"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="#000000"
+            android:textColorHint="#808080"
+            android:visibility="gone" />      </RelativeLayout>
 
-    </RelativeLayout>
-
-    <ProgressBar
-        android:id="@+id/progressBar"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_container_subjects"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/Toplayout"
+        app:shimmer_auto_start="true"
+        android:visibility="visible"> <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+        android:orientation="vertical">
+        <include layout="@layout/shimmer_item_subject" />
+        <include layout="@layout/shimmer_item_subject" />
+        <include layout="@layout/shimmer_item_subject" />
+        <include layout="@layout/shimmer_item_subject" />
+        <include layout="@layout/shimmer_item_subject" />
+    </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <LinearLayout
+        android:id="@+id/actual_content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/Toplayout"
+        android:orientation="vertical"
+        android:visibility="gone"> <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewSubject"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/Toplayout"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"/>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/recyclerViewSubject"
-        android:layout_marginTop="15dp"
-        android:text="@string/subjectAdding"
-        android:textSize="18sp"
-        android:textColor="@color/Colour_After_click"
-        android:textAlignment="center"/>
-
-
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="@string/subjectAdding"
+            android:textSize="18sp"
+            android:textColor="@color/Colour_After_click"
+            android:textAlignment="center"/>
+    </LinearLayout>
 
 </RelativeLayout>

@@ -9,34 +9,31 @@
     app:cardElevation="6dp"
     android:layout_margin="12dp"
     android:foreground="?attr/selectableItemBackground"
-    android:backgroundTint="#FFFFFF"
-    android:padding="16dp">
+    android:backgroundTint="#FFFFFF">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
-        <!-- Logo Image -->
         <ImageView
             android:id="@+id/logoImage"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:scaleType="fitXY"
             android:src="@mipmap/ic_launcher_round"
-            android:backgroundTint="#FFB630"
-            />
-
-        <!-- Tags -->
+            android:scaleType="fitCenter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/shortDescription" />
         <LinearLayout
             android:id="@+id/tagsContainer"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/logoImage"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:orientation="horizontal">
+            android:layout_marginStart="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toEndOf="@id/logoImage"
+            app:layout_constraintTop_toTopOf="@id/logoImage"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
                 android:id="@+id/tagLive"
@@ -44,8 +41,8 @@
                 android:layout_height="wrap_content"
                 android:text="Live"
                 android:padding="6dp"
-                android:backgroundTint="#DC3333"
                 android:background="@drawable/tag_background"
+                android:backgroundTint="#DC3333"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
                 android:layout_marginEnd="8dp" />
@@ -56,8 +53,8 @@
                 android:layout_height="wrap_content"
                 android:text="BSc 1st Year"
                 android:padding="6dp"
-                android:backgroundTint="#4A4A4A"
                 android:background="@drawable/tag_background"
+                android:backgroundTint="#4A4A4A"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
                 android:layout_marginEnd="8dp" />
@@ -68,72 +65,67 @@
                 android:layout_height="wrap_content"
                 android:text="Animated"
                 android:padding="6dp"
-                android:backgroundTint="#FFB630 "
                 android:background="@drawable/tag_background"
+                android:backgroundTint="#FFB630"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp" />
         </LinearLayout>
 
-        <!-- Title -->
         <TextView
             android:id="@+id/titleText"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tagsContainer"
-            android:layout_toEndOf="@id/logoImage"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="Course Title"
             android:textSize="18sp"
             android:textStyle="bold"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="#4B2A06" />
+            android:textColor="#4B2A06"
+            app:layout_constraintStart_toEndOf="@id/logoImage"
+            app:layout_constraintTop_toBottomOf="@id/tagsContainer"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Short Description -->
         <TextView
             android:id="@+id/shortDescription"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/titleText"
-            android:layout_toEndOf="@id/logoImage"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:maxLines="2"
-            android:ellipsize="end"
             android:text="This is a short description of the course. It highlights key features in just a few lines."
             android:textSize="14sp"
-            android:textColor="#4A4A4A" />
-
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/shortDescription"
-            android:layout_alignParentEnd="true">
-        <!-- Price Section -->
-        <TextView
-            android:id="@+id/price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Price:"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#000000" />
+            android:textColor="#4A4A4A"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintStart_toEndOf="@id/logoImage"
+            app:layout_constraintTop_toBottomOf="@id/titleText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="0.0" /> <TextView
+        android:id="@+id/priceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Price:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@id/shortDescription"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/priceNumber"
+        android:layout_marginEnd="4dp"/>
 
         <TextView
             android:id="@+id/priceNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/price"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="12dp"
             android:text="NPR 600"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#4B2A06"
-            android:layout_marginEnd="10dp"/>
-        </RelativeLayout>
-    </RelativeLayout>
+            app:layout_constraintTop_toTopOf="@id/priceLabel"
+            app:layout_constraintBottom_toBottomOf="@id/priceLabel"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

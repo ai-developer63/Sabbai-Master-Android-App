@@ -8,27 +8,92 @@
         android:id="@+id/shimmer_view_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:shimmer_auto_start="true">
+        app:shimmer_auto_start="true"
+        android:visibility="visible">
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/home_design_upper"
+        android:padding="16dp">
+        <View
+            android:layout_width="150dp"
+            android:layout_height="24dp"
+            android:layout_gravity="start"
+            android:layout_marginTop="40dp"
+            android:background="@color/placeholder_bg" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/placeholder_bg" />
+    </LinearLayout>
 
-            <!-- Placeholder Views for Simulated Loading -->
-
+        <View
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/placeholder_bg" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
             <View
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginBottom="8dp"
-                android:background="@android:color/darker_gray" />
-
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/placeholder_bg"/>
             <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/logocolorbright" />
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/placeholder_bg"/>
+            <View
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@color/placeholder_bg"/>
         </LinearLayout>
-    </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <View
+            android:layout_width="150dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:background="@color/placeholder_bg" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/placeholder_bg"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/placeholder_bg"/>
+
+    </LinearLayout>
+</com.facebook.shimmer.ShimmerFrameLayout>
+
+<androidx.core.widget.NestedScrollView
+android:id="@+id/main_content_scrollview"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:visibility="gone"> <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/Toplayout"
@@ -51,32 +116,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/logoImage"
-            android:layout_marginStart="15dp"
-            android:textColor="@color/white"
+            android:layout_alignParentStart="true" android:layout_marginStart="16dp"     android:layout_marginTop="8dp"      android:textColor="@color/white"
             android:textSize="21sp"
             android:textStyle="bold" />
-
-<!--        <EditText-->
-<!--            android:id="@+id/searchEditText"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:layout_below="@id/welcomeTxt"-->
-<!--            android:layout_margin="8dp"-->
-<!--            android:background="@drawable/rounded_edittext_background"-->
-<!--            android:drawableEnd="@drawable/search_icon"-->
-<!--            android:drawablePadding="8dp"-->
-<!--            android:hint="@string/search_tools_text"-->
-<!--            android:paddingStart="36dp"-->
-<!--            android:paddingEnd="16dp"-->
-<!--            android:textColor="#000000"-->
-<!--            android:textColorHint="#808080" />-->
-
 
         <TextView
             android:id="@+id/latestNews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/welcomeTxt"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="gone" />
@@ -88,30 +139,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/Toplayout"
-        android:layout_marginTop="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="Available Classes"
-        android:textSize="20sp" />
+        android:textColor="@android:color/black" android:textSize="20sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categoryRecycle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtClasses"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:paddingStart="16dp" android:paddingEnd="16dp"
+        android:clipToPadding="false"/>
 
     <TextView
         android:id="@+id/txtCourses"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/categoryRecycle"
-        android:layout_marginTop="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="Courses"
-        android:textSize="20sp" />
+        android:textColor="@android:color/black" android:textSize="20sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/subjectRecycle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtCourses"
-        android:layout_marginTop="10dp" />
-</RelativeLayout>
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="16dp"/> </RelativeLayout>
+</androidx.core.widget.NestedScrollView>
+    </RelativeLayout>

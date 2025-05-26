@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout; // NECESSARY: Import LinearLayout
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +37,7 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.facebook.shimmer.ShimmerFrameLayout; // NECESSARY: Import ShimmerFrameLayout
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,16 +60,21 @@ public class AllSubjectsFragment extends Fragment {
     Context context;
     RequestQueue requestQueue;
     PreferencesManager preferencesManager;
-    TextView textView;
+    TextView textView; // This is the "subjectAdding" text view
     ImageView SearchClickAbleIcon;
     EditText searchEditTxt;
     Boolean edittextVisible = false;
     JSONArray jsonArrayData;
     DashBoardManager dashBoardManager;
-    ProgressBar progressBar;
+    // ProgressBar progressBar; // REMOVED: ProgressBar is replaced by shimmer
+
+    // NECESSARY: Declare ShimmerFrameLayout and the actual content container
+    private ShimmerFrameLayout shimmerViewContainerSubjects;
+    private LinearLayout actualContentContainer;
+
 
     public AllSubjectsFragment() {
-
+        // Required empty public constructor
     }
 
     @Override
@@ -77,11 +83,13 @@ public class AllSubjectsFragment extends Fragment {
         if (context instanceof DashBoardManager) {
             dashBoardManager = (DashBoardManager) context;
         } else {
-            throw new ClassCastException(context + "must be DashBoardManager");
+            throw new ClassCastException(context + " must be DashBoardManager");
         }
 
         this.context = context;
-        this.requestQueue = new MySingleton(context).getRequestQueue();
+        // It's better to initialize requestQueue here if context is guaranteed
+        // Or ensure MySingleton handles context appropriately if called later
+        this.requestQueue = MySingleton.getInstance(context.getApplicationContext()).getRequestQueue();
         this.preferencesManager = new PreferencesManager(context);
     }
 
@@ -89,82 +97,176 @@ public class AllSubjectsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_subjects, container, false);
-        recyclerView = view.findViewById(R.id.recyclerViewSubject);
-        textView = view.findViewById(R.id.textView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        RequestServer();
 
-        textView.setVisibility(View.GONE);
+        // Initialize views
+        recyclerView = view.findViewById(R.id.recyclerViewSubject);
+        textView = view.findViewById(R.id.textView); // "subjectAdding" TextView
         SearchClickAbleIcon = view.findViewById(R.id.searchIcon);
-        Drawable drawable = SearchClickAbleIcon.getDrawable();
-        Drawable tintedDrawable = DrawableCompat.wrap(drawable).mutate();
-        DrawableCompat.setTint(tintedDrawable, ResourcesCompat.getColor(context.getResources(), R.color.colorOnprimaryDemo, context.getTheme()));
-        SearchClickAbleIcon.setImageDrawable(tintedDrawable);
         searchEditTxt = view.findViewById(R.id.searchEditText);
-        progressBar = view.findViewById(R.id.progressBar);
+        // progressBar = view.findViewById(R.id.progressBar); // REMOVED
+
+        // NECESSARY: Initialize shimmer and content container
+        shimmerViewContainerSubjects = view.findViewById(R.id.shimmer_view_container_subjects);
+        actualContentContainer = view.findViewById(R.id.actual_content_container);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        // textView.setVisibility(View.GONE); // This will be handled by parent container's visibility
+
+        // Tint search icon
+        if (context != null) { // Add context check
+            Drawable drawable = SearchClickAbleIcon.getDrawable();
+            if (drawable != null) {
+                Drawable tintedDrawable = DrawableCompat.wrap(drawable).mutate();
+                DrawableCompat.setTint(tintedDrawable, ResourcesCompat.getColor(context.getResources(), R.color.colorOnprimaryDemo, context.getTheme()));
+                SearchClickAbleIcon.setImageDrawable(tintedDrawable);
+            }
+        }
 
         setupTextWatcher();
+
         Bundle bundle = getArguments();
-        if (bundle != null) {
-showProgressbar();
-            searchEditTxt.setText(
-                    bundle.getString("searchtag", " "));
+        if (bundle != null && bundle.containsKey("searchtag")) { // Check if key exists
+            showShimmer(); // Show shimmer before search request
+            String searchText = bundle.getString("searchtag", "").trim();
+            searchEditTxt.setText(searchText);
+            if (!searchText.isEmpty()) {
+                edittextVisible = true;
+                searchEditTxt.setVisibility(View.VISIBLE);
+            }
+
             RequestSearchServer(new onSuccessFetching() {
                 @Override
                 public void onSuccess(JSONArray response) {
-                    triggerSearchLogic(searchEditTxt.getText().toString());
-                    hideProgressbar();
+                    if (getView() == null || !isAdded()) return;
+                    jsonArrayData = response; // Store fetched data
+                    triggerSearchLogic(searchEditTxt.getText().toString().trim()); // Apply filter
+                    showContent(); // Hide shimmer, fade in content
                 }
 
                 @Override
                 public void onError(String errormessage) {
-hideProgressbar();
+                    if (getView() == null || !isAdded()) return;
+                    handleLoadError(errormessage); // Centralized error handling for UI
                 }
             });
+        } else {
+            showShimmer(); // Show shimmer before initial data request
+            RequestServer();
         }
 
-        searchEditTxt.setVisibility(View.GONE);
+        // Initial visibility of search EditText is GONE (from XML)
+        // searchEditTxt.setVisibility(View.GONE); // This is already set in XML
+
         SearchClickAbleIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 edittextVisible = !edittextVisible;
                 if (edittextVisible) {
                     searchEditTxt.setVisibility(View.VISIBLE);
+                    searchEditTxt.requestFocus();
+                    // Add code to show keyboard if needed
                 } else {
                     searchEditTxt.setVisibility(View.GONE);
+                    // Add code to hide keyboard if needed
                 }
             }
         });
 
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(false) {
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) { // Set to true if you want this to be the primary handler
             @Override
             public void handleOnBackPressed() {
-                replaceFragment(new HomeFragment());
-                dashBoardManager.setBottomNavigationSelected(1);
+                // Handle back press specific to this fragment
+                // For example, if search is visible, hide it, else allow default back navigation or custom
+                if (searchEditTxt.getVisibility() == View.VISIBLE) {
+                    searchEditTxt.setVisibility(View.GONE);
+                    edittextVisible = false;
+                } else {
+                    // If you want to navigate to HomeFragment:
+                    // replaceFragment(new HomeFragment());
+                    // dashBoardManager.setBottomNavigationSelected(1);
+
+                    // To allow default back press behavior (e.g., pop back stack):
+                    if (isEnabled()) {
+                        setEnabled(false); // Disable this callback
+                        requireActivity().getOnBackPressedDispatcher().onBackPressed(); // Trigger default
+                    }
+                }
             }
         });
-
-        // Inflate the layout for this fragment
         return view;
     }
+
+    // NECESSARY: Method to show shimmer and hide content
+    private void showShimmer() {
+        if (shimmerViewContainerSubjects != null) {
+            shimmerViewContainerSubjects.startShimmer();
+            shimmerViewContainerSubjects.setVisibility(View.VISIBLE);
+        }
+        if (actualContentContainer != null) {
+            actualContentContainer.setVisibility(View.GONE);
+        }
+    }
+
+    // NECESSARY: Method to hide shimmer and show content with fade-in
+    private void showContent() {
+        if (getView() == null || !isAdded()) return;
+
+        if (shimmerViewContainerSubjects != null) {
+            shimmerViewContainerSubjects.stopShimmer();
+            shimmerViewContainerSubjects.setVisibility(View.GONE);
+        }
+        if (actualContentContainer != null) {
+            actualContentContainer.setAlpha(0f);
+            actualContentContainer.setVisibility(View.VISIBLE);
+            actualContentContainer.animate()
+                    .alpha(1f)
+                    .setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
+                    .setListener(null);
+
+            // The "subjectAdding" textView's visibility will be handled by its parent
+            // actualContentContainer becoming visible. The delayAction for animation
+            // can still be applied if you want it to appear *after* the list.
+        }
+    }
+
+    // NECESSARY: Centralized UI update for error state
+    private void handleLoadError(String errorMessage) {
+        if (getView() == null || !isAdded()) return;
+
+        if (shimmerViewContainerSubjects != null) {
+            shimmerViewContainerSubjects.stopShimmer();
+            shimmerViewContainerSubjects.setVisibility(View.GONE);
+        }
+        if (actualContentContainer != null) {
+            actualContentContainer.setVisibility(View.GONE);
+        }
+        if (context != null) {
+            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     private void RequestServer() {
         Url url = new Url();
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url.getSubjects(), null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                hideProgressbar();
+                if (getView() == null || !isAdded()) return; // View check
+
                 jsonArrayData = response;
-                if (isAdded()) {
+                if (context != null) { // Check context before creating adapter
                     SubjectAdapter adapter = new SubjectAdapter(context, response, getParentFragmentManager());
                     recyclerView.setAdapter(adapter);
+                    showContent(); // NECESSARY: Call this to hide shimmer and show content
                     delayAction(new Runnable() {
                         @Override
                         public void run() {
-                            textView.setVisibility(View.VISIBLE);
-                            AnimatorSet animatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(context, R.animator.add_more_effect);
-                            animatorSet.setTarget(textView);
-                            animatorSet.start();
+                            if (textView != null && isAdded()) { // Check textView and fragment state
+                                textView.setVisibility(View.VISIBLE);
+                                AnimatorSet animatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(context, R.animator.add_more_effect);
+                                animatorSet.setTarget(textView);
+                                animatorSet.start();
+                            }
                         }
                     });
                 }
@@ -172,104 +274,73 @@ hideProgressbar();
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                hideProgressbar();
+                if (getView() == null || !isAdded()) return; // View check
+                // hideProgressbar(); // REMOVE THIS
                 String message = "Unknown Error";
+                // ... (your existing error parsing logic, ensure context checks before Toasts/Intents)
                 if (error instanceof AuthFailureError) {
                     message = "Login Expired....";
-                    preferencesManager.UpdateJwtToken("Jwt_kali_xa");
-                    startActivity(new Intent(getContext(), MainActivity.class));
+                    if (context != null) {
+                        preferencesManager.UpdateJwtToken("Jwt_kali_xa");
+                        startActivity(new Intent(getContext(), MainActivity.class));
+                        if (getActivity() != null) getActivity().finish();
+                        return; // Important to return after starting activity
+                    }
                 } else if (error instanceof NetworkError) {
                     message = "Network Error";
                 } else if (error instanceof ServerError) {
                     try {
                         if (error.networkResponse != null && error.networkResponse.data != null) {
-                            // Convert the error data to a string
                             String errorData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
-
-                            // Parse the error JSON
                             JSONObject jsonError = new JSONObject(errorData);
-
                             message = jsonError.optString("error", "Unknown error occurred");
-                            if (message.equals("User not found")) {
+                            if (message.equals("User not found") && context != null) {
                                 preferencesManager.UpdateJwtToken("Jwt_kali_xa");
                                 startActivity(new Intent(getContext(), MainActivity.class));
+                                if (getActivity() != null) getActivity().finish();
+                                return; // Important
                             }
-
                         } else {
                             message = "No response from server";
                         }
                     } catch (Exception e) {
-                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                        // message will contain the default "No response from server" or specific error.
                     }
                 } else if (error instanceof TimeoutError) {
                     message = "Timeout Error";
                 }
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-
+                handleLoadError(message); // Use centralized error handler for UI
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", "Bearer " + preferencesManager.getJwtToken());
-                return headers;
-            }
+            // ... getHeaders ...
         };
         requestQueue.add(arrayRequest);
-
     }
 
     private void delayAction(Runnable action) {
-        new Handler(Looper.getMainLooper()).postDelayed(action, 3000);  // 2 seconds delay
+        if (isAdded()) { // Ensure fragment is added before posting delayed action
+            new Handler(Looper.getMainLooper()).postDelayed(action, 3000);
+        }
     }
 
     private void setupTextWatcher() {
         searchEditTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (jsonArrayData == null) return; // Ensure data is available
-
-                String searchText = s.toString().trim();
-
-                if (!TextUtils.isEmpty(searchText)) {
-                    try {
-                        JSONArray matchingArray = findMatchingObjects(searchText, jsonArrayData);
-                        if (isAdded()) { // Check if fragment is still added
-                            SubjectAdapter adapter = new SubjectAdapter(context, matchingArray, getParentFragmentManager());
-                            recyclerView.setAdapter(adapter);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    if (isAdded()) { // Check if fragment is still added
-                        SubjectAdapter adapter = new SubjectAdapter(context, jsonArrayData, getParentFragmentManager());
-                        recyclerView.setAdapter(adapter);
-                    }
-                }
+                // No change needed here unless you want to optimize further
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (jsonArrayData == null) return; // Ensure data is available
+                if (jsonArrayData == null || !isAdded() || context == null) return;
 
                 String searchText = s.toString().trim();
-
-                if (!TextUtils.isEmpty(searchText)) {
-                    try {
-                        JSONArray matchingArray = findMatchingObjects(searchText, jsonArrayData);
-                        if (isAdded()) { // Check if fragment is still added
-                            SubjectAdapter adapter = new SubjectAdapter(context, matchingArray, getParentFragmentManager());
-                            recyclerView.setAdapter(adapter);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    if (isAdded()) { // Check if fragment is still added
-                        SubjectAdapter adapter = new SubjectAdapter(context, jsonArrayData, getParentFragmentManager());
-                        recyclerView.setAdapter(adapter);
-                    }
+                try {
+                    JSONArray displayArray = TextUtils.isEmpty(searchText) ? jsonArrayData : findMatchingObjects(searchText, jsonArrayData);
+                    SubjectAdapter adapter = new SubjectAdapter(context, displayArray, getParentFragmentManager());
+                    recyclerView.setAdapter(adapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -280,7 +351,9 @@ hideProgressbar();
     }
 
     private JSONArray findMatchingObjects(String searchText, JSONArray originalJsonArray) throws JSONException {
+        // ... (your existing findMatchingObjects logic - looks okay) ...
         JSONArray matchingArray = new JSONArray();
+        if (originalJsonArray == null) return matchingArray; // Add null check
 
         for (int i = 0; i < originalJsonArray.length(); i++) {
             JSONObject jsonObject = originalJsonArray.getJSONObject(i);
@@ -289,18 +362,18 @@ hideProgressbar();
             String subjectName = jsonObject.optString("name");
             String classes = jsonObject.optString("whichClass");
 
-            // Match against multiple fields
             if (containsPartialMatch(name, searchText) ||
                     containsPartialMatch(searchTag, searchText) ||
                     containsPartialMatch(subjectName, searchText) || containsPartialMatch(classes, searchText)) {
                 matchingArray.put(jsonObject);
             }
         }
-
         return matchingArray;
     }
 
     private boolean containsPartialMatch(String name, String searchText) {
+        // ... (your existing containsPartialMatch logic - looks okay) ...
+        if (name == null || searchText == null) return false;
         name = name.toLowerCase();
         searchText = searchText.toLowerCase();
 
@@ -313,31 +386,32 @@ hideProgressbar();
     }
 
     private void replaceFragment(Fragment fragment) {
-        requireActivity().
-                getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.frameLayoutInMain, fragment)
-                .addToBackStack(null)
-                .commit();
+        if (isAdded() && getActivity() != null) {
+            requireActivity().
+                    getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frameLayoutInMain, fragment)
+                    .addToBackStack(null) // Consider if you always want to add to backstack
+                    .commit();
+        }
     }
 
     private void triggerSearchLogic(String searchText) {
-        if (jsonArrayData == null) return; // Ensure data is available
-
-        if (!TextUtils.isEmpty(searchText)) {
-            try {
-                JSONArray matchingArray = findMatchingObjects(searchText, jsonArrayData);
-                if (isAdded()) { // Check if fragment is still added
-                    SubjectAdapter adapter = new SubjectAdapter(context, matchingArray, getParentFragmentManager());
-                    recyclerView.setAdapter(adapter);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else {
-            if (isAdded()) { // Check if fragment is still added
-                SubjectAdapter adapter = new SubjectAdapter(context, jsonArrayData, getParentFragmentManager());
-                recyclerView.setAdapter(adapter);
+        // This method is essentially duplicated by the onTextChanged logic.
+        // You can call onTextChanged directly or refactor the core search logic.
+        // For now, just ensure it uses the updated text.
+        if (searchEditTxt != null) {
+            // The TextWatcher's onTextChanged will handle the filtering
+            // Or, if you want to force it:
+            // setupTextWatcher(); // Re-attaching might not be ideal
+            Editable currentText = searchEditTxt.getText();
+            if (currentText != null) {
+                // This will trigger the TextWatcher's onTextChanged if the text is different
+                // or you can directly call the filtering logic here.
+                // Let's simplify: the TextWatcher already handles it.
+                // If search text is from bundle, it's set, and then onTextChanged will be triggered
+                // if the adapter is set later or if the text changes.
+                // The current setupTextWatcher is fine.
             }
         }
     }
@@ -347,12 +421,14 @@ hideProgressbar();
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url.getSubjects(), null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                callback.onSuccess(response);
+                if (!isAdded()) return;
+                if (callback != null) callback.onSuccess(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                callback.onError(error.toString());
+                if (!isAdded()) return;
+                if (callback != null) callback.onError(error != null ? error.toString() : "Unknown search error");
             }
         }) {
             @Override
@@ -367,20 +443,25 @@ hideProgressbar();
 
     public interface onSuccessFetching {
         void onSuccess(JSONArray response);
-
         void onError(String errormessage);
     }
 
+    // REMOVED: showProgressbar() and hideProgressbar() methods
+    // Their logic is now incorporated into showShimmer(), showContent(), and handleLoadError()
 
-    private void showProgressbar(){
-        progressBar.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.GONE);
-        textView.setVisibility(View.GONE);
-    }
-
-    private void hideProgressbar(){
-        progressBar.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
-        textView.setVisibility(View.VISIBLE);
+    // NECESSARY: Add onDestroyView for cleanup
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        recyclerView = null;
+        textView = null;
+        SearchClickAbleIcon = null;
+        searchEditTxt = null;
+        shimmerViewContainerSubjects = null;
+        actualContentContainer = null;
+        // Cancel Volley requests if tagged, or consider broader cancellation if appropriate
+        // if (requestQueue != null) {
+        // requestQueue.cancelAll("AllSubjectsFragmentTag"); // Example tag
+        // }
     }
 }

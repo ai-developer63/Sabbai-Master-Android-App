@@ -110,7 +110,7 @@ public class SubjecAdapterWithDay extends RecyclerView.Adapter<SubjecAdapterWith
             classTag = itemView.findViewById(R.id.tagBsc);
             button = itemView.findViewById(R.id.subjectCard);
             Price = itemView.findViewById(R.id.priceNumber);
-            pricetext = itemView.findViewById(R.id.price);
+
 
         }
     }

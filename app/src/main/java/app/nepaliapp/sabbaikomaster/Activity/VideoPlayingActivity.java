@@ -168,7 +168,6 @@ public class VideoPlayingActivity extends AppCompatActivity {
         } catch (JSONException e) {
             Toast.makeText(this, "List of Video is Damaged", Toast.LENGTH_SHORT).show();
         }
-        Log.d("video Url", link);
         MediaItem mediaItem = MediaItem.fromUri(link);
 
         initializePlayer(mediaItem);

@@ -194,10 +194,14 @@ public class SubjectViewFragment extends Fragment {
             public void onResponse(JSONObject response) {
                 Log.d("View Subject wala", response.toString());
                 subjectTitle.setText(response.optString("name"));
+                float textSize = calculateDynamicTextSize(response.optString("name").length());
+                subjectTitle.setTextSize(textSize);
                 HeaderPicasso.initializePicassoWithHeaders(requireContext(), "Authorization", "Bearer " + preferencesManager.getJwtToken());
                 Picasso.get().load(response.optString("url")).into(subjectLogoImage);
                 coursesPrice.setText(String.format("%s%s", requireContext().getString(R.string.ruppes), response.optString("price")));
                  String videoKey=response.optString("syallbusVideoId");
+                 preferencesManager.updateUserViewedSubject(response.optString("id"),response.optString("name"),response.optString("price"));
+
                 if(videoKey.isEmpty()|| videoKey.isBlank()||videoKey.equalsIgnoreCase("no Video")){
                     subjectLogoImage.setVisibility(View.VISIBLE);
                     youTubePlayerView.setVisibility(View.GONE);
@@ -277,5 +281,19 @@ public class SubjectViewFragment extends Fragment {
                 .replace(R.id.frameLayoutInMain, fragment)
                 .addToBackStack(null)
                 .commit();
+    }
+    private static float calculateDynamicTextSize(int length) {
+        float maxSize = 18f;
+        float minSize = 13f; // Minimum size for very long emails
+        float lengthLimit = 70f; // Maximum length before hitting the smallest size
+
+        // Calculate size incrementally between maxSize and minSize
+        if (length <= 18) {
+            return maxSize;
+        } else {
+            float sizeStep = (maxSize - minSize) / (lengthLimit - 18); // Decrease per character
+            float textSize = maxSize - ((length - 18) * sizeStep);
+            return Math.max(minSize, textSize); // Ensure it doesn't drop below minSize
+        }
     }
 }

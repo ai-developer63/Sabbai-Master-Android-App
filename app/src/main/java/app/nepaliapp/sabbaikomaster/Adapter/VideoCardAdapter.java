@@ -67,7 +67,7 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         JSONObject object = array.optJSONObject(position);
-        Log.d("search subject id", object.toString());
+        Log.d("search subject id",object.toString());
         holder.title.setText(object.optString("title"));
         holder.subTitle.setText("Full topics Detail is here");
         holder.author.setText("Sabbai ko Master");
@@ -78,7 +78,7 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardAdapter.View
             @Override
             public void onClick(View v) {
 
-                isPurchasedServer("1", new PurchaseCallback() {
+                isPurchasedServer(preferencesManager.getUserClickedSubject("id"), new PurchaseCallback() {
                     @Override
                     public void onSuccess(boolean isPurchased) {
                         if (isPurchased) {
@@ -91,7 +91,7 @@ public class VideoCardAdapter extends RecyclerView.Adapter<VideoCardAdapter.View
                             context.startActivity(intent);
                         }else {
 //request part
-                           ToastUtils.showToast(context,"Sorry");
+                   SubscriptionDialog.show(context,preferencesManager.getUserClickedSubject("id"), preferencesManager.getUserClickedSubject("name"),preferencesManager.getUserClickedSubject("price"));
                         }
                     }
 

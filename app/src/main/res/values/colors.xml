@@ -20,6 +20,7 @@
     <color name="red">#D83428</color>
     <color name="green">#58F813</color>
 
-
+    <color name="placeholder_bg">#DDDDDD</color>
+    <color name="placeholder_bg_light">#EFEFEF</color>
     <color name="teal_700">#FF018786</color>
 </resources>

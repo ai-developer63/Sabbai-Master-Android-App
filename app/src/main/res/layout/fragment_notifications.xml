@@ -70,7 +70,7 @@
                         android:id="@+id/scheduleTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Upcoming Event Title"
+                        android:text="Update of App in Progress"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/black" />
@@ -82,7 +82,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/scheduleTitle"
                         android:layout_marginTop="4dp"
-                        android:text="Details about the scheduled event..."
+                        android:text="New feature is updating in app."
                         android:textSize="14sp"
                         android:textColor="@color/Colour_After_click" />
 
@@ -92,7 +92,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="10:00 AM"
+                        android:text="2082/03/03 \n 11:00 AM"
                         android:textSize="14sp"
                         android:textStyle="italic"
                         android:textColor="@color/colorAccentDemo" />

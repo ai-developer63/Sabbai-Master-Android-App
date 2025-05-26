@@ -5,7 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragmentManager.DashBoardManager">
+    tools:context=".fragmentManager.DashBoardManager"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/frameLayoutInMain"
